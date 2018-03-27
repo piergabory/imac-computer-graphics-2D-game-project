@@ -1,12 +1,7 @@
 #ifndef window_init_h
 #define window_init_h
 
-#include <SDL2/SDL.h>
-
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <GLKit/GLKMatrix4.h>
-
+#include "frameworks.h"
 #include "messages.h"
 
 
