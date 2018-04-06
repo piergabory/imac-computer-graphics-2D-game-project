@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -g
-LDFLAGS = -framework OpenGL -framework SDL2 -framework SDL2_image -framework Cocoa
+LDFLAGS =
 
 APP_BIN = flapimac
 
@@ -12,6 +12,23 @@ LIB_PATH = lib
 
 SRC_FILES = $(shell find $(SRC_PATH) -type f -name '*.c')
 OBJ_FILES = $(patsubst $(SRC_PATH)/%.c,$(OBJ_PATH)/%.o, $(SRC_FILES))
+
+
+ifeq ($(OS),Windows_NT)
+	CCFLAGS += -D Windows
+else
+    UNAME_S := $(shell uname -s)
+
+    ifeq ($(UNAME_S),Linux)
+        CCFLAGS += -D Linux
+    endif
+
+    ifeq ($(UNAME_S),Darwin)
+        CCFLAGS += -D MacOs
+		LDFLAGS = -framework OpenGL SDL2  SDL2_image  Cocoa
+    endif
+endif
+
 
 all: $(APP_BIN)
 
