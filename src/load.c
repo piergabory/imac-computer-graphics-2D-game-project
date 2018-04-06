@@ -1,6 +1,10 @@
 #include "../include/load.h"
 #include "../include/messages.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #define PPM_MAGIC_NUM "P6"
 
 static MobList allocMob(unsigned char type, float x, float y) {
@@ -34,6 +38,8 @@ static MobList allocMob(unsigned char type, float x, float y) {
  */
 
 int loadWorld(char* path, World *w, MobList *enemy, MobList *bonus) {
+    // TODO : Discard comments
+    
     // attempts to open file
     FILE *in = NULL;
     if ((in = fopen(path,"r")) == NULL) {
@@ -82,19 +88,19 @@ int loadWorld(char* path, World *w, MobList *enemy, MobList *bonus) {
         };
 
         // obstacle
-        w->data[x*y-1] = (r > 0) ? 0:1;
+        w->data[x*y-1] = (r == max && g == 0 && b == 0) ? 0:1;
         
         // enemy
-        if (g > 0) {
-            if ((*enemy = allocMob(MOB_TYPE_ENEMY, x, y))!= NULL)
+        if (r == 0 && g == max && b == 0) {
+            if ((*enemy = allocMob(ENEMY, x, y))!= NULL)
                 enemy = &(*enemy)->next;
             else return 3;
                 
         }
         
         // bonus
-        if (b > 0) {
-            if ((*bonus = allocMob(MOB_TYPE_BONUS, x, y))!= NULL)
+        if (r == 0 && g == 0 && b == max) {
+            if ((*bonus = allocMob(BONUS, x, y))!= NULL)
                 bonus = &(*bonus)->next;
             else return 3;
                 

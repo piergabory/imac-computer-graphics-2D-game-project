@@ -1,28 +1,7 @@
 #ifndef load_h
 #define load_h
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define MAX_FILE_LINE_LENGTH 512
-
-#define MOB_TYPE_ENEMY 'e'
-#define MOB_TYPE_BONUS 'b'
-
-typedef struct world {
-    int width, height;
-    int *data;
-} World;
-
-typedef struct mobile {
-    float ypos, xpos;
-    unsigned char type;
-    struct mobile *next;
-} Mob, *MobList;
-
-
-
+#include "../include/flapimac.h"
 
 /* LOAD WORLD DATA
  * ===============
