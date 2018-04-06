@@ -20,6 +20,7 @@
  */
 int initWindow(SDL_Window **win, char* title);
 
+
 /*  UPDATE VIEWPORT
  *  ---------------
  *  Handles resizing of the window.
@@ -28,6 +29,7 @@ int initWindow(SDL_Window **win, char* title);
  *  and scales the space to fit the size of the window.
  */
 void updateViewport();
+
 
 // window dimentions:
 static unsigned int WINDOW_WIDTH = WINDOW_DEFAULT_WIDTH;

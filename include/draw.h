@@ -2,6 +2,7 @@
 #define draw_h
 
 #include "window.h"
+#include "sprites.h"
 
 // color used when clearing the screen
 #define CLEAR_COLOR /*red:*/ 0, /*blue:*/ 0, /*green:*/ 0, /*alpha:*/ 1.0
