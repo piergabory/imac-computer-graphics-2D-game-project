@@ -8,17 +8,12 @@
     #include <OpenGL/gl.h>
     #include <OpenGL/glu.h>
     #include <GLKit/GLKMatrix4.h>
-#endif
 
 // Linux
-#ifdef Linux
-    // TODO
+#else
+    #include <SDL2/SDL.h>
+    #include <GL/gl.h>
+    #include <GL/glu.h>
 #endif
-
-// Window
-#ifdef Windows
-    // TODO
-#endif
-
 
 #endif /* frameworks_h */

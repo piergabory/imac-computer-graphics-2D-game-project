@@ -14,19 +14,12 @@ SRC_FILES = $(shell find $(SRC_PATH) -type f -name '*.c')
 OBJ_FILES = $(patsubst $(SRC_PATH)/%.c,$(OBJ_PATH)/%.o, $(SRC_FILES))
 
 
-ifeq ($(OS),Windows_NT)
-	CCFLAGS += -D Windows
+UNAME := $(shell uname -s)
+ifeq ($(UNAME),Darwin)
+    CFLAGS += -D MacOS
+    LDFLAGS = -framework OpenGL -framework SDL2 -framework SDL2_image -framework Cocoa
 else
-    UNAME_S := $(shell uname -s)
-
-    ifeq ($(UNAME_S),Linux)
-        CCFLAGS += -D Linux
-    endif
-
-    ifeq ($(UNAME_S),Darwin)
-        CCFLAGS += -D MacOs
-		LDFLAGS = -framework OpenGL SDL2  SDL2_image  Cocoa
-    endif
+	CFLAGS += -D Linux
 endif
 
 
@@ -34,11 +27,11 @@ all: $(APP_BIN)
 
 $(APP_BIN): $(OBJ_FILES)
 	@mkdir -p $(BIN_PATH)
-	$(CC) -o $(BIN_PATH)/$(APP_BIN) $(OBJ_FILES) $(LDFLAGS)
+	$(CC) -o $(BIN_PATH)/$(APP_BIN) $(OBJ_FILES) $(CFLAGS) $(LDFLAGS)
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 	@mkdir -p "$(@D)"
-	$(CC) -c -v $< -o $@ $(CFLAGS) $(INC_PATH)
+	$(CC) -c $< -o $@ $(CFLAGS) $(INC_PATH)
 
 clean:
 	rm $(OBJ_FILES) $(BIN_PATH)/$(APP_BIN)
