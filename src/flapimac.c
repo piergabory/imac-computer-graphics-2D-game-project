@@ -4,14 +4,13 @@
 
 int initGame() {
     // set player
-    player.xpos = 0;
-    player.ypos = 0;
+    player.px = player.py = player.vx = player.vy = 0;
     player.type = PLAYER;
     player.next = NULL;
     
     // set world
-    loadWorld("image.ppm", &obstacleMap, &enemies, &bonuses);
-    obstacleMap.progress = 0;
+    loadWorld("image.ppm", &level, &enemies, &bonuses);
+    level.progress = 0;
     
     return 1;
 }

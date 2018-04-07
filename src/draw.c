@@ -1,19 +1,19 @@
 #include "../include/draw.h"
-World obstacleMap;
+Level level;
 /* DRAW LOOP
  * ---------
  * OpenGL code executed between each clearBuffer and swapBuffer.
  */
 static void draw() {
     glPushMatrix();
-    glScalef(1.0/obstacleMap.width, 1.0/obstacleMap.height, 1.0);
+    glScalef(1.0/level.width, 1.0/level.height, 1.0);
     
     glPushMatrix();
-    glTranslatef(-(obstacleMap.progress+=0.001),0,0);
-    drawTerrain(obstacleMap);
+    glTranslatef(-(level.progress+=0.001),0,0);
+    drawTerrain(level);
     glPopMatrix();
     
-    glTranslatef(player.xpos, obstacleMap.height + player.ypos * 0.5,0);
+    glTranslatef(player.px * level.width, player.py * level.height,0);
     drawSprite(SPRITE_PLAYER);
     /*
         DRAWING CODE GOES HERE

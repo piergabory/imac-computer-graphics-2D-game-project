@@ -9,25 +9,28 @@
 #define PLAYER 'p'
 
 
-typedef struct world {
+typedef struct level {
     float progress;
     int width, height;
-    int **data;
-} World;
+    int **map;
+} Level;
 
 typedef struct mobile {
-    float ypos, xpos;
+    float ay, ax;
+    float vy, vx;
+    float py, px;
     unsigned char type;
     struct mobile *next;
 } Mob, *MobList;
 
-World obstacleMap;
+Level level;
 MobList enemies;
 MobList bonuses;
 Mob player;
 
 int initGame();
+void updateGame();
 
-void movePlayer(int direction);
+void changePlayerXYSpeedBy(float vx, float vy);
 
 #endif /* flapimac_h */

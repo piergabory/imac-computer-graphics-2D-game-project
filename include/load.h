@@ -15,6 +15,6 @@
  * Will handle the file loading, parsing and edit of the world and mobile lists
  */
 
-int loadWorld(char* path, World *w, MobList *enemy, MobList *bonus);
+int loadWorld(char* path, Level *w, MobList *enemy, MobList *bonus);
 
 #endif /* load_h */

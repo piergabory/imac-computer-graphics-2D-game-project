@@ -14,8 +14,8 @@ static MobList allocMob(unsigned char type, float x, float y) {
         return NULL;
     }
     
-    new->xpos = x;
-    new->ypos = y;
+    new->px = x;
+    new->py = y;
     new->type = type;
     new->next = NULL;
     
@@ -37,7 +37,7 @@ static MobList allocMob(unsigned char type, float x, float y) {
  * Will handle the file loading, parsing and edit of the world and mobile lists
  */
 
-int loadWorld(char* path, World *w, MobList *enemy, MobList *bonus) {
+int loadWorld(char* path, Level *l, MobList *enemy, MobList *bonus) {
     // TODO : Discard comments
     
     // attempts to open file
@@ -63,15 +63,15 @@ int loadWorld(char* path, World *w, MobList *enemy, MobList *bonus) {
     
     // read metadata (image width/height, max pixel value)
     unsigned int max = 1;
-    if(fscanf(in, "%d %d %d", &(w->width), &(w->height), &max) == EOF) {
+    if(fscanf(in, "%d %d %d", &(l->width), &(l->height), &max) == EOF) {
         printf(ERR_FILE_END, path);
         return 3;
     };
     
     // allocate memory
     // obstacle map rows
-    w->data = (int**)calloc(w->width, sizeof(int*));
-    if (w->data == NULL) {
+    l->map = (int**)calloc(l->width, sizeof(int*));
+    if (l->map == NULL) {
         printf(ERR_MALLOC);
         return 4;
     }
@@ -80,16 +80,16 @@ int loadWorld(char* path, World *w, MobList *enemy, MobList *bonus) {
     // read data
     unsigned int r = 0, g = 0, b = 0;
     
-    for (int x = 0; x < w->width; x++){
+    for (int x = 0; x < l->width; x++){
         
         // allocate memory for obstacle map columns
-        w->data[x] = (int*)calloc(w->height, sizeof(int));
-        if (w->data == NULL) {
+        l->map[x] = (int*)calloc(l->height, sizeof(int));
+        if (l->map == NULL) {
             printf(ERR_MALLOC);
             return 4;
         }
         
-        for (int y = 0; y < w->height; y++) {
+        for (int y = 0; y < l->height; y++) {
             // get pixel
             if(fscanf(in, "%d %d %d", &r, &g, &b) == EOF) {
                 printf(ERR_FILE_END, path);
@@ -97,7 +97,7 @@ int loadWorld(char* path, World *w, MobList *enemy, MobList *bonus) {
             };
 
             // obstacle
-            w->data[x][y] = r;
+            l->map[x][y] = r;
 
             // enemy
             if (r == 0 && g == max && b == 0) {
