@@ -8,6 +8,17 @@
 
 static GLuint spritesGlus;
 
+/* DRAW SPRITE
+ * ===========
+ *
+ * Prints a sprite on the screen.
+ */
+void drawSprite(const unsigned int spriteindex) {
+    glCallList(spritesGlus + spriteindex);
+}
+
+
+
 /* INIT SPRITE GLUS
  * ================
  * @return status boolean.
@@ -79,13 +90,4 @@ int initSprites() {
     }
     
     return 1;
-}
-
-/* DRAW SPRITE
- * ===========
- *
- * Prints a sprite on the screen.
- */
-void drawSprite(const unsigned int spriteindex) {
-    glCallList(spritesGlus + spriteindex);
 }

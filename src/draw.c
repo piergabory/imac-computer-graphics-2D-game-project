@@ -127,7 +127,7 @@ static int loop(SDL_Window *win) {
  */
 void startLoop(SDL_Window *win) {
     // set sky color
-    glClearColor(0.5, /*blue:*/ 0.7, /*green:*/ 1.0, /*alpha:*/ 1.0);
+    glClearColor(0.5, 0.7, 1.0, 1.0);
     
     // enable transparency
     glEnable(GL_BLEND);
