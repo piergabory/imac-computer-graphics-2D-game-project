@@ -6,6 +6,7 @@ World obstacleMap;
  */
 static void draw() {
     glPushMatrix();
+    glScalef(1.0/obstacleMap.width, 1.0/obstacleMap.height, 1.0);
     
     drawTerrain(obstacleMap);
     /*
@@ -103,6 +104,7 @@ static int loop(SDL_Window *win) {
  * the loop method is called until it returns false (0)
  */
 void startLoop(SDL_Window *win) {
+    // set sky color
     glClearColor(0.5, /*blue:*/ 0.7, /*green:*/ 1.0, /*alpha:*/ 1.0);
     
     // enable transparency

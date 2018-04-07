@@ -4,13 +4,27 @@
 #include "../include/frameworks.h"
 #include "../include/flapimac.h"
 
-/* GET SPRITE GLU
- * ==============
- * @param file path to a .png file (texture of the sprite)
- * @return OpenGL list. When called, draws a textured square.
+#include "../include/sprites.h"
+#include "../include/messages.h"
+
+#define SPRITE_WALL 0
+#define SPRITE_PLAYER 1
+
+/* INIT SPRITES
+ * ============
+ * @return status boolean.
  *
- * Handles texture loading and GL list compiling.
+ * Handles texture loading and GL list compiling. Prepare sprite list.
  */
-GLuint getSpriteGlu(char *file);
+int initSprites();
+
+
+/* DRAW SPRITE
+ * ===========
+ *
+ * Prints a sprite on the screen.
+ */
+void drawSprite(const unsigned int spriteindex);
+
 
 #endif /* sprites_h */

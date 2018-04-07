@@ -1,61 +1,91 @@
 #include "../include/sprites.h"
 #include "../include/messages.h"
 
+#define SPRITES_COUNT 2
+#define TEXTURE_FILE "textures.png"
+#define TEXTURE_COL 8
+#define TEXTURE_ROW 8
 
-/* GET SPRITE GLU
- * ==============
- * @param file path to a .png file (texture of the sprite)
- * @return OpenGL list. When called, draws a textured square.
+static GLuint spritesGlus;
+
+/* INIT SPRITE GLUS
+ * ================
+ * @return status boolean.
  *
- * Handles texture loading and GL list compiling.
+ * Handles texture loading and GL list compiling. Prepare sprite list.
  */
 
-// TODO ? : Load one spritesheet instead of a png for each sprite
- GLuint getSpriteGlu(char *file) {
+int initSprites() {
     SDL_Surface* image = NULL;
     GLuint texId;
     
     /*~~~~~~~Texture loading~~~~~~~*/
     // image data loading
-    if((image = (SDL_Surface*)IMG_Load(file)) == NULL){
-        printf(ERR_FILE_OPEN, file);
+    if((image = (SDL_Surface*)IMG_Load(TEXTURE_FILE)) == NULL){
+        printf(ERR_FILE_OPEN, TEXTURE_FILE);
         return 0;
     }
     
+    // configure texture
     glGenTextures(1, &texId);
     glBindTexture(GL_TEXTURE_2D, texId);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->w, image->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image->pixels);
     
+    // set texture coordinates variables
+    float textureWidth = 1.0/TEXTURE_COL;
+    float textureHeight = 1.0/TEXTURE_ROW;
+    float textureX = 0, textureY = 0;
+    
     // free image data
     SDL_FreeSurface(image);
-
-     
-    /*~~~~~~~GL List~~~~~~~*/
-    GLuint newList = glGenLists(1);
-    glNewList(newList,GL_COMPILE);
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, texId);
-    glBegin(GL_QUADS);
     
-    // drawing a square:
-    // vertex and their matching texture coordinates
-    glTexCoord2f(1, 1);
-    glVertex2f(1, 1);
-     
-    glTexCoord2f(0, 1);
-    glVertex2f(0, 1);
-     
-    glTexCoord2f(0, 0);
-    glVertex2f(0, 0);
-     
-    glTexCoord2f(1, 0);
-    glVertex2f(1, 0);
-
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glEndList();
     
-    return newList;
+    /*~~~~~~~GLu Lists~~~~~~~*/
+    // init lists
+    spritesGlus = glGenLists(SPRITES_COUNT);
+    
+    // for each textures
+    for (int i = 0; i < SPRITES_COUNT; i++) {
+        // move to the texture location
+        textureX = i * textureWidth;
+        textureY = i / TEXTURE_COL * textureHeight;
+        
+        // init glu list
+        glNewList(spritesGlus + i,GL_COMPILE);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texId);
+        glBegin(GL_QUADS);
+        
+        // drawing a square:
+        // vertex and their matching texture coordinates
+        glTexCoord2f(textureX + textureWidth, textureY + textureHeight);
+        glVertex2f(0.5, 0.5);
+        
+        glTexCoord2f(textureX, textureY + textureHeight);
+        glVertex2f(-0.5, 0.5);
+        
+        glTexCoord2f(textureX, textureY);
+        glVertex2f(-0.5, -0.5);
+        
+        glTexCoord2f(textureX + textureWidth, textureY);
+        glVertex2f(0.5, -0.5);
+        
+        // close list
+        glEnd();
+        glDisable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glEndList();
+    }
+    
+    return 1;
+}
+
+/* DRAW SPRITE
+ * ===========
+ *
+ * Prints a sprite on the screen.
+ */
+void drawSprite(const unsigned int spriteindex) {
+    glCallList(spritesGlus + spriteindex);
 }

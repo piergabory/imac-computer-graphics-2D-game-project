@@ -17,6 +17,7 @@ int main(int argc, char** argv) {
     loadWorld("/Users/piergabory/Developer/IMAC/Computer Graphics/Projet/projet_rasterisation/image.ppm", &obstacleMap, &enemies, &bonuses);
     
     
+    initSprites();
     // start main loop, updating the screen at a set refresh rate
     // - see draw(), static function in draw.h
     startLoop(window);
