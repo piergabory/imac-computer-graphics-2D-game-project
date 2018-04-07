@@ -3,9 +3,11 @@
 
 #include "window.h"
 #include "sprites.h"
+#include "terrain.h"
+#include "flapimac.h"
 
 // color used when clearing the screen
-#define CLEAR_COLOR /*red:*/ 0, /*blue:*/ 0, /*green:*/ 0, /*alpha:*/ 1.0
+//#define CLEAR_COLOR /*red:*/ 0.5, /*blue:*/ 1.0, /*green:*/ 0.6, /*alpha:*/ 1.0
 
 
 /* START LOOP

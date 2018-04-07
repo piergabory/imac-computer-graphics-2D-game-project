@@ -1,5 +1,5 @@
 #include "../include/draw.h"
-
+World obstacleMap;
 /* DRAW LOOP
  * ---------
  * OpenGL code executed between each clearBuffer and swapBuffer.
@@ -7,6 +7,7 @@
 static void draw() {
     glPushMatrix();
     
+    drawTerrain(obstacleMap);
     /*
         DRAWING CODE GOES HERE
      */
@@ -102,6 +103,11 @@ static int loop(SDL_Window *win) {
  * the loop method is called until it returns false (0)
  */
 void startLoop(SDL_Window *win) {
-    glClearColor(CLEAR_COLOR);
+    glClearColor(0.5, /*blue:*/ 0.7, /*green:*/ 1.0, /*alpha:*/ 1.0);
+    
+    // enable transparency
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     while (loop(win));
 }

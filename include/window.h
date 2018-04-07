@@ -5,8 +5,8 @@
 #include "messages.h"
 
 
-#define WINDOW_DEFAULT_WIDTH    200
-#define WINDOW_DEFAULT_HEIGHT   200
+#define WINDOW_DEFAULT_WIDTH    800
+#define WINDOW_DEFAULT_HEIGHT   600
 
 
 /*  INIT WINDOW

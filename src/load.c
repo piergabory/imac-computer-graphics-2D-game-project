@@ -68,8 +68,9 @@ int loadWorld(char* path, World *w, MobList *enemy, MobList *bonus) {
         return 3;
     };
     
-    // allocate memory for the obstacle data
-    w->data = (int*)malloc(w->width * w->height * sizeof(int));
+    // allocate memory
+    // obstacle map rows
+    w->data = (int**)calloc(w->width, sizeof(int*));
     if (w->data == NULL) {
         printf(ERR_MALLOC);
         return 4;
@@ -79,34 +80,40 @@ int loadWorld(char* path, World *w, MobList *enemy, MobList *bonus) {
     // read data
     unsigned int r = 0, g = 0, b = 0;
     
-    for (int x = 1; x <= w->width; x++)
-    for (int y = 1; y <= w->height; y++) {
-        // get pixel
-        if(fscanf(in, "%d %d %d", &r, &g, &b) == EOF) {
-            printf(ERR_FILE_END, path);
-            return 3;
-        };
-
-        // obstacle
-        w->data[x*y-1] = (r == max && g == 0 && b == 0) ? 0:1;
+    for (int x = 0; x < w->width; x++){
         
-        // enemy
-        if (r == 0 && g == max && b == 0) {
-            if ((*enemy = allocMob(ENEMY, x, y))!= NULL)
-                enemy = &(*enemy)->next;
-            else return 3;
-                
+        // allocate memory for obstacle map columns
+        w->data[x] = (int*)calloc(w->height, sizeof(int));
+        if (w->data == NULL) {
+            printf(ERR_MALLOC);
+            return 4;
         }
         
-        // bonus
-        if (r == 0 && g == 0 && b == max) {
-            if ((*bonus = allocMob(BONUS, x, y))!= NULL)
-                bonus = &(*bonus)->next;
-            else return 3;
-                
-        }
+        for (int y = 0; y < w->height; y++) {
+            // get pixel
+            if(fscanf(in, "%d %d %d", &r, &g, &b) == EOF) {
+                printf(ERR_FILE_END, path);
+                return 3;
+            };
 
+            // obstacle
+            w->data[x][y] = r;
+
+            // enemy
+            if (r == 0 && g == max && b == 0) {
+                if ((*enemy = allocMob(ENEMY, x, y))!= NULL)
+                    enemy = &(*enemy)->next;
+                else return 3;
+                
+            }
+            
+            // bonus
+            if (r == 0 && g == 0 && b == max) {
+                if ((*bonus = allocMob(BONUS, x, y))!= NULL)
+                    bonus = &(*bonus)->next;
+                else return 3;
+            }
+        }
     }
-    
     return 0;
 }

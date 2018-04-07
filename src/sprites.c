@@ -24,7 +24,7 @@
     
     glGenTextures(1, &texId);
     glBindTexture(GL_TEXTURE_2D, texId);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->w, image->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image->pixels);
     
     // free image data
@@ -41,16 +41,16 @@
     // drawing a square:
     // vertex and their matching texture coordinates
     glTexCoord2f(1, 1);
-    glVertex2f(-1, -1);
-     
-    glTexCoord2f(0, 1);
-    glVertex2f(1, -1);
-     
-    glTexCoord2f(0, 0);
     glVertex2f(1, 1);
      
+    glTexCoord2f(0, 1);
+    glVertex2f(0, 1);
+     
+    glTexCoord2f(0, 0);
+    glVertex2f(0, 0);
+     
     glTexCoord2f(1, 0);
-    glVertex2f(-1, 1);
+    glVertex2f(1, 0);
 
     glEnd();
     glDisable(GL_TEXTURE_2D);

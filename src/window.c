@@ -46,15 +46,13 @@ void updateViewport() {
     
     
     // get viewport aspect ratio
-    float vwr,vhr;
+    float vwr = 1,vhr = 1;
     if (WINDOW_WIDTH > WINDOW_HEIGHT) {
         vwr = WINDOW_WIDTH/(float)WINDOW_HEIGHT;
-        vhr = 1.0;
     } else {
-        vwr = 1.0;
         vhr = WINDOW_HEIGHT/(float)WINDOW_WIDTH;
     }
     
-    GLKMatrix4 orthoMat = GLKMatrix4MakeOrtho(-vwr, vwr, -vhr, vhr, -1.0f, 1.0f);
+    GLKMatrix4 orthoMat = GLKMatrix4MakeOrtho(0, vwr, vhr, 0, -1.0f, 1.0f);
     glLoadMatrixf(orthoMat.m);
 }

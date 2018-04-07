@@ -11,7 +11,7 @@
 
 typedef struct world {
     int width, height;
-    int *data;
+    int **data;
 } World;
 
 typedef struct mobile {
@@ -20,5 +20,8 @@ typedef struct mobile {
     struct mobile *next;
 } Mob, *MobList;
 
+World obstacleMap;
+MobList enemies;
+MobList bonuses;
 
 #endif /* flapimac_h */
