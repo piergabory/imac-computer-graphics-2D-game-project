@@ -56,11 +56,19 @@ static void eventLoop() {
                     break;
                     
                 case SDLK_z: case SDLK_UP:
-                    movePlayer(1);
+                    changePlayerXYSpeedBy(0, 0.005);
                     break;
                     
                 case SDLK_s: case SDLK_DOWN:
-                    movePlayer(-1);
+                    changePlayerXYSpeedBy(0, -0.005);
+                    break;
+                    
+                case SDLK_q: case SDLK_LEFT:
+                    changePlayerXYSpeedBy(-0.005, 0);
+                    break;
+                    
+                case SDLK_d: case SDLK_RIGHT:
+                    changePlayerXYSpeedBy(0.005, 0);
                     break;
             }
         break;
@@ -95,6 +103,8 @@ static void eventLoop() {
 static int loop(SDL_Window *win) {
     Uint32 startTime = SDL_GetTicks();
     glClear(GL_COLOR_BUFFER_BIT);
+    
+    updateGame();
     
     // execute draw
     draw();
