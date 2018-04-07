@@ -10,6 +10,7 @@
 
 
 typedef struct world {
+    float progress;
     int width, height;
     int **data;
 } World;
@@ -23,5 +24,10 @@ typedef struct mobile {
 World obstacleMap;
 MobList enemies;
 MobList bonuses;
+Mob player;
+
+int initGame();
+
+void movePlayer(int direction);
 
 #endif /* flapimac_h */

@@ -8,7 +8,13 @@ static void draw() {
     glPushMatrix();
     glScalef(1.0/obstacleMap.width, 1.0/obstacleMap.height, 1.0);
     
+    glPushMatrix();
+    glTranslatef(-(obstacleMap.progress+=0.001),0,0);
     drawTerrain(obstacleMap);
+    glPopMatrix();
+    
+    glTranslatef(player.xpos, obstacleMap.height + player.ypos * 0.5,0);
+    drawSprite(SPRITE_PLAYER);
     /*
         DRAWING CODE GOES HERE
      */
@@ -42,6 +48,22 @@ static void eventLoop() {
         case SDL_QUIT:
             loopStatus = 0;
             break;
+            
+        case SDL_KEYDOWN :
+            switch (e.key.keysym.sym) {
+                case SDLK_SPACE:
+                    printf("bang!\n");
+                    break;
+                    
+                case SDLK_z: case SDLK_UP:
+                    movePlayer(1);
+                    break;
+                    
+                case SDLK_s: case SDLK_DOWN:
+                    movePlayer(-1);
+                    break;
+            }
+        break;
         
         case SDL_WINDOWEVENT:
             if(e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED){

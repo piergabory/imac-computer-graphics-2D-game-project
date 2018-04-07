@@ -10,14 +10,12 @@ World obstacleMap;
 int main(int argc, char** argv) {
     SDL_Window *window = NULL;
     
-    
     // initialise SDL and show a new window on screen
     if (!initWindow(&window, WINDOW_TITLE)) return 0;
     
-    loadWorld("/Users/piergabory/Developer/IMAC/Computer Graphics/Projet/projet_rasterisation/image.ppm", &obstacleMap, &enemies, &bonuses);
-    
-    
     initSprites();
+    initGame();
+
     // start main loop, updating the screen at a set refresh rate
     // - see draw(), static function in draw.h
     startLoop(window);
