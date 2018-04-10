@@ -1,29 +1,6 @@
 #include "../include/load.h"
-#include "../include/messages.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define PPM_MAGIC_NUM "P6"
-
-static MobList allocMob(unsigned char type, float x, float y) {
-    MobList new = (MobList)malloc(sizeof(Mob));
-    if (new == NULL) {
-        printf(ERR_MALLOC);
-        return NULL;
-    }
-    
-    new->px = x;
-    new->py = y;
-    new->type = type;
-    new->next = NULL;
-    
-    return new;
-}
-
-
-
 
 /* LOAD WORLD DATA
  * ===============
@@ -37,7 +14,7 @@ static MobList allocMob(unsigned char type, float x, float y) {
  * Will handle the file loading, parsing and edit of the world and mobile lists
  */
 
-int loadWorld(char* path, Level *l, MobList *enemy, MobList *bonus) {
+int loadWorld(char *path, Game *gm) {
     // TODO : Discard comments
     
     // attempts to open file
@@ -63,15 +40,15 @@ int loadWorld(char* path, Level *l, MobList *enemy, MobList *bonus) {
     
     // read metadata (image width/height, max pixel value)
     unsigned int max = 1;
-    if(fscanf(in, "%d %d %d", &(l->width), &(l->height), &max) == EOF) {
+    if(fscanf(in, "%d %d %d", &(gm->level->width), &(gm->level->height), &max) == EOF) {
         printf(ERR_FILE_END, path);
         return 3;
     };
     
     // allocate memory
     // obstacle map rows
-    l->map = (int**)calloc(l->width, sizeof(int*));
-    if (l->map == NULL) {
+    gm->level->map = (int**)calloc(gm->level->width, sizeof(int*));
+    if (gm->level->map == NULL) {
         printf(ERR_MALLOC);
         return 4;
     }
@@ -80,16 +57,16 @@ int loadWorld(char* path, Level *l, MobList *enemy, MobList *bonus) {
     // read data
     unsigned int r = 0, g = 0, b = 0;
     
-    for (int x = 0; x < l->width; x++){
+    for (int x = 0; x < gm->level->width; x++){
         
         // allocate memory for obstacle map columns
-        l->map[x] = (int*)calloc(l->height, sizeof(int));
-        if (l->map == NULL) {
+        gm->level->map[x] = (int*)calloc(gm->level->height, sizeof(int));
+        if (gm->level->map == NULL) {
             printf(ERR_MALLOC);
             return 4;
         }
         
-        for (int y = 0; y < l->height; y++) {
+        for (int y = 0; y < gm->level->height; y++) {
             // get pixel
             if(fscanf(in, "%d %d %d", &r, &g, &b) == EOF) {
                 printf(ERR_FILE_END, path);
@@ -97,20 +74,20 @@ int loadWorld(char* path, Level *l, MobList *enemy, MobList *bonus) {
             };
 
             // obstacle
-            l->map[x][y] = r;
+            gm->level->map[x][y] = r;
 
             // enemy
             if (r == 0 && g == max && b == 0) {
-                if ((*enemy = allocMob(ENEMY, x, y))!= NULL)
-                    enemy = &(*enemy)->next;
+                if ((gm->enemy = allocMob(ENEMY, x, y))!= NULL)
+                    gm->enemy = &(gm->enemy)->next;
                 else return 3;
                 
             }
             
             // bonus
             if (r == 0 && g == 0 && b == max) {
-                if ((*bonus = allocMob(BONUS, x, y))!= NULL)
-                    bonus = &(*bonus)->next;
+                if ((gm->bonus = allocMob(BONUS, x, y))!= NULL)
+                   gm->bonus = &(gm->bonus)->next;
                 else return 3;
             }
         }

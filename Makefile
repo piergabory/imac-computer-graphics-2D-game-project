@@ -27,11 +27,11 @@ all: $(APP_BIN)
 
 $(APP_BIN): $(OBJ_FILES)
 	@mkdir -p $(BIN_PATH)
-	$(CC) -o $(BIN_PATH)/$(APP_BIN) $(OBJ_FILES) $(CFLAGS) $(LDFLAGS)
+	$(CC) -o -v $(BIN_PATH)/$(APP_BIN) $(OBJ_FILES) $(CFLAGS) $(LDFLAGS)
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 	@mkdir -p "$(@D)"
-	$(CC) -c $< -o $@ $(CFLAGS) $(INC_PATH)
+	$(CC) -c -v $< -o $@ $(CFLAGS) $(INC_PATH)
 
 clean:
 	rm $(OBJ_FILES) $(BIN_PATH)/$(APP_BIN)

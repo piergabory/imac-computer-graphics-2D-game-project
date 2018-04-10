@@ -1,11 +1,7 @@
 #ifndef sprites_h
 #define sprites_h
 
-#include "../include/frameworks.h"
-#include "../include/flapimac.h"
-
-#include "../include/sprites.h"
-#include "../include/messages.h"
+#include "frameworks.h"
 
 #define SPRITE_WALL 0
 #define SPRITE_PLAYER 1

@@ -1,6 +1,12 @@
 #ifndef flapimac_h
 #define flapimac_h
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+#include "load.h"
+
 // Game logic
 
 #define ENEMY 'e'
@@ -30,15 +36,11 @@ typedef struct game{
     Mob *player;
 } Game;
 
+Game *initGame();
+void updateGame();
 
-Level level;
-MobList enemies;
-MobList bonuses;
-Mob player;
+void changeXYSpeedBy(Mob *player, float vx, float vy);
 
-Game initGame();
-Game updateGame();
-
-void changePlayerXYSpeedBy(Mob *player, float vx, float vy);
+MobList allocMob(unsigned char type, float x, float y);
 
 #endif /* flapimac_h */

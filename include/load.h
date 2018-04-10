@@ -1,7 +1,13 @@
 #ifndef load_h
 #define load_h
 
-#include "../include/flapimac.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "game.h"
+#include "messages.h"
+
 
 /* LOAD WORLD DATA
  * ===============
@@ -15,6 +21,6 @@
  * Will handle the file loading, parsing and edit of the world and mobile lists
  */
 
-int loadWorld(char* path, Level *w, MobList *enemy, MobList *bonus);
+int loadWorld(char *path, Game *gm);
 
 #endif /* load_h */
