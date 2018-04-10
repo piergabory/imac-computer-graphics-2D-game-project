@@ -23,14 +23,22 @@ typedef struct mobile {
     struct mobile *next;
 } Mob, *MobList;
 
+typedef struct game{
+    Level *level;
+    MobList *enemies;
+    MobList *bonuses;
+    Mob *player;
+} Game;
+
+
 Level level;
 MobList enemies;
 MobList bonuses;
 Mob player;
 
-int initGame();
-void updateGame();
+Game initGame();
+Game updateGame();
 
-void changePlayerXYSpeedBy(float vx, float vy);
+void changePlayerXYSpeedBy(Mob *player, float vx, float vy);
 
 #endif /* flapimac_h */
