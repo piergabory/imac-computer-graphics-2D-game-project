@@ -2,6 +2,7 @@
 #define sprites_h
 
 #include "frameworks.h"
+#include "messages.h"
 
 #define SPRITE_WALL 0
 #define SPRITE_PLAYER 1

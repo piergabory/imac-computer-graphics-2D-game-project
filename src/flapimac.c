@@ -9,7 +9,7 @@
 // framerate (minimum delay before the return of a loop call)
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
-int main(int argc, char** argv) {
+int main(void) {
     SDL_Window *window = NULL;
     Game *flapimac;
     
@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
         draw(*flapimac);
         
         // manages events
-        eventLoop(flapimac->player, &loopStatus);
+        loopStatus = eventLoop(flapimac->player);
         
         // swap window
         SDL_GL_SwapWindow(window);

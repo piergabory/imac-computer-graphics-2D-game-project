@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -g
+CFLAGS = -Wall -Werror -W -g
 LDFLAGS =
 
 APP_BIN = flapimac
@@ -27,7 +27,7 @@ all: $(APP_BIN)
 
 $(APP_BIN): $(OBJ_FILES)
 	@mkdir -p $(BIN_PATH)
-	$(CC) -o -v $(BIN_PATH)/$(APP_BIN) $(OBJ_FILES) $(CFLAGS) $(LDFLAGS)
+	$(CC) -o $(BIN_PATH)/$(APP_BIN) $(OBJ_FILES) $(CFLAGS) $(LDFLAGS)
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 	@mkdir -p "$(@D)"

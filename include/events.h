@@ -3,6 +3,6 @@
 
 #include "draw.h"
 
-int eventLoop(Mob *player, int *loopStatus);
+int eventLoop(Mob *player);
 
 #endif /* events_h */

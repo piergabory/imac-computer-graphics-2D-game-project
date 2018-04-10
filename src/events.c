@@ -8,11 +8,11 @@
  * - QUIT: set loopStatus to 0 so the main loop stops and the program ends.
  * - WINDOW IS RESIZED: collects new width and height and update the window (see window.h)
  */
-int eventLoop(Mob *player, int *loopStatus) {
+int eventLoop(Mob *player) {
     SDL_Event e;
     while(SDL_PollEvent(&e)) switch(e.type) {
         case SDL_QUIT:
-            *loopStatus = 0;
+                return 0;
             break;
             
         case SDL_KEYDOWN :
@@ -49,4 +49,5 @@ int eventLoop(Mob *player, int *loopStatus) {
             
         default: break;
     }
+    return 1;
 }
