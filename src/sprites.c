@@ -1,5 +1,4 @@
 #include "../include/sprites.h"
-#include "../include/messages.h"
 
 #define SPRITES_COUNT 2
 #define TEXTURE_FILE "textures.png"

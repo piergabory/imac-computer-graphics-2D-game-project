@@ -1,147 +1,41 @@
 #include "../include/draw.h"
-Level level;
+
 /* DRAW LOOP
  * ---------
  * OpenGL code executed between each clearBuffer and swapBuffer.
  */
-static void draw() {
+void draw(Game gm) {
     glPushMatrix();
-    glScalef(1.0/level.width, 1.0/level.height, 1.0);
+    glScalef(1.0/gm.level->width, 1.0/gm.level->height, 1.0);
     
+    // paint terrain
     glPushMatrix();
-    glTranslatef(-(level.progress+=0.001),0,0);
-    drawTerrain(level);
+    glTranslatef(-(gm.level->progress+=0.001),0,0);
+    drawTerrain(*(gm.level));
     glPopMatrix();
     
-    glTranslatef(player.px * level.width, player.py * level.height,0);
+    // paint player
+    glTranslatef(gm.player->px * gm.level->width, gm.player->py * gm.level->height,0);
     drawSprite(SPRITE_PLAYER);
-    /*
-        DRAWING CODE GOES HERE
-     */
     
     glPopMatrix();
 }
 
-
-
-
-// framerate (minimum delay before the return of a loop call)
-static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
-
-// tells weather the main loop shall continue or not
-static int loopStatus = 1;
-
-
-
-
-/* EVENT LOOP
+/* INIT VIEW
  * ----------
- * SDL event loop handler
- * Asks SDL for any events and handles them accordingly
- *
- * - QUIT: set loopStatus to 0 so the main loop stops and the program ends.
- * - WINDOW IS RESIZED: collects new width and height and update the window (see window.h)
-*/
-static void eventLoop() {
-    SDL_Event e;
-    while(SDL_PollEvent(&e)) switch(e.type) {
-        case SDL_QUIT:
-            loopStatus = 0;
-            break;
-            
-        case SDL_KEYDOWN :
-            switch (e.key.keysym.sym) {
-                case SDLK_SPACE:
-                    printf("bang!\n");
-                    break;
-                    
-                case SDLK_z: case SDLK_UP:
-                    changePlayerXYSpeedBy(0, 0.005);
-                    break;
-                    
-                case SDLK_s: case SDLK_DOWN:
-                    changePlayerXYSpeedBy(0, -0.005);
-                    break;
-                    
-                case SDLK_q: case SDLK_LEFT:
-                    changePlayerXYSpeedBy(-0.005, 0);
-                    break;
-                    
-                case SDLK_d: case SDLK_RIGHT:
-                    changePlayerXYSpeedBy(0.005, 0);
-                    break;
-            }
-        break;
-        
-        case SDL_WINDOWEVENT:
-            if(e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED){
-                WINDOW_WIDTH = e.window.data1;
-                WINDOW_HEIGHT = e.window.data2;
-                updateViewport();
-            }
-            break;
-        
-        default: break;
-    }
-}
-
-
-
-
-/* LOOP
- * ----
- * Main SDL Loop
- * @param: SDL window, see window.h
- *
- * - tracks time
- * - clears the screen with clearing color (set in draw.h)
- * - calls draw
- * - starts event loop
- * - swap buffers
- * - wait for the next frame before returning
- */
-static int loop(SDL_Window *win) {
-    Uint32 startTime = SDL_GetTicks();
-    glClear(GL_COLOR_BUFFER_BIT);
-    
-    updateGame();
-    
-    // execute draw
-    draw();
-    
-    // manages events
-    eventLoop();
-    
-    // swap window
-    SDL_GL_SwapWindow(win);
-    
-    // wait
-    Uint32 elapsedTime = SDL_GetTicks() - startTime;
-    if(elapsedTime < FRAMERATE_MILLISECONDS) {
-        SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
-    }
-    
-    return loopStatus;
-}
-
-
-
-
-/* START LOOP
- * ----------
- * Initialise and launch main loop, begining drawing and event tracking operations
+ * Initialise view
  *
  * @param: sdl window (see window.h)
  *
  * the loop method is called until it returns false (0)
  */
-void startLoop(SDL_Window *win) {
+void initView() {
+    initSprites();
+    
     // set sky color
     glClearColor(0.5, 0.7, 1.0, 1.0);
     
     // enable transparency
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    while (loop(win));
 }

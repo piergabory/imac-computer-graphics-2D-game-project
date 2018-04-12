@@ -1,23 +1,26 @@
 #ifndef draw_h
 #define draw_h
 
+#include "game.h"
 #include "window.h"
 #include "sprites.h"
 #include "terrain.h"
-#include "flapimac.h"
-
-// color used when clearing the screen
-//#define CLEAR_COLOR /*red:*/ 0.5, /*blue:*/ 1.0, /*green:*/ 0.6, /*alpha:*/ 1.0
 
 
-/* START LOOP
+/* INIT VIEW
  * ----------
- * Initialise and launch main loop, begining drawing and event tracking operations
+ * Initialise view
  *
  * @param: sdl window (see window.h)
  *
- * Here lies the heart of the program, startLoop won't return until a quit event is fired
+ * the loop method is called until it returns false (0)
  */
-void startLoop(SDL_Window *win);
+void initView();
+
+/* DRAW LOOP
+ * ---------
+ * OpenGL code executed between each clearBuffer and swapBuffer.
+ */
+void draw(Game gm);
 
 #endif /* draw_h */

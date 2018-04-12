@@ -1,7 +1,24 @@
-#ifndef load_h
-#define load_h
+#ifndef flapimac_h
+#define flapimac_h
 
-#include "../include/flapimac.h"
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+
+#include "gamedata.h"
+#include "messages.h"
+
+// Game logic
+
+
+
+Game *initGame();
+
+void updateGame();
+
+void changeXYSpeedBy(Mob *player, float vx, float vy);
+
+
 
 /* LOAD WORLD DATA
  * ===============
@@ -15,6 +32,6 @@
  * Will handle the file loading, parsing and edit of the world and mobile lists
  */
 
-int loadWorld(char* path, Level *w, MobList *enemy, MobList *bonus);
+int loadWorld(char *path, Game *gm);
 
-#endif /* load_h */
+#endif /* flapimac_h */

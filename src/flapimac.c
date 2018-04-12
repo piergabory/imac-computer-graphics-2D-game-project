@@ -1,47 +1,52 @@
-#include "../include/flapimac.h"
-#include "../include/load.h"
-#include <stdio.h>
-#include <math.h>
+#include "../include/game.h"
+#include "../include/window.h"
+#include "../include/draw.h"
+#include "../include/events.h"
+#include "../include/messages.h"
 
-#define MAX_SPEED 1
-#define DRAG 0.95
+#define WINDOW_TITLE "Flap-imac"
 
-int initGame() {
-    // set player
-    player.px = player.py = player.vx = player.vy = 0;
-    player.type = PLAYER;
-    player.next = NULL;
+// framerate (minimum delay before the return of a loop call)
+static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
+
+int main(void) {
+    SDL_Window *window = NULL;
+    Game *flapimac;
     
-    // set world
-    loadWorld("image.ppm", &level, &enemies, &bonuses);
-    level.progress = 0;
+    // initialise SDL and show a new window on screen
+    if (!initWindow(&window, WINDOW_TITLE)) return 0;
+    
+    flapimac = initGame();
+
+    // start main loop, updating the screen at a set refresh rate
+    // - see draw(), static function in draw.h
+    initView();
+    
+    int loopStatus = 1;
+    while (loopStatus) {
+        Uint32 startTime = SDL_GetTicks();
+        glClear(GL_COLOR_BUFFER_BIT);
+        
+        updateGame(flapimac);
+        
+        // execute draw
+        draw(*flapimac);
+        
+        // manages events
+        loopStatus = eventLoop(flapimac->player);
+        
+        // swap window
+        SDL_GL_SwapWindow(window);
+        
+        // wait
+        Uint32 elapsedTime = SDL_GetTicks() - startTime;
+        if(elapsedTime < FRAMERATE_MILLISECONDS) {
+            SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
+        }
+    }
+    
+    // free SDL ressources once the loop ended
+    SDL_Quit();
     
     return 1;
-}
-
-void updateGame() {
-    // position
-    player.px += player.vx;
-    player.py += player.vy;
-    
-    // drag
-    player.vx *= DRAG;
-    player.vy *= DRAG;
-    
-    
-    // bounce on borders
-    if (player.px > 1 || player.px < 0) {
-        player.vx *= -1;
-        player.px = roundf(player.px);
-    }
-    
-    if (player.py > 1 || player.py < 0) {
-        player.vy *= -1;
-        player.py = roundf(player.py);
-    }
-}
-
-void changePlayerXYSpeedBy(float vx, float vy) {
-    if (fabs(player.vx + vx) < MAX_SPEED) player.vx += vx;
-    if (fabs(player.vy + vy) < MAX_SPEED) player.vy += vy;
 }

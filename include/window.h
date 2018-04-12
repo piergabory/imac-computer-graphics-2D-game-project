@@ -4,7 +4,6 @@
 #include "frameworks.h"
 #include "messages.h"
 
-
 #define WINDOW_DEFAULT_WIDTH    800
 #define WINDOW_DEFAULT_HEIGHT   600
 

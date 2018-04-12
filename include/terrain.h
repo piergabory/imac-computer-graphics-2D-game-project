@@ -1,9 +1,9 @@
 #ifndef obstacles_h
 #define obstacles_h
 
-#include "flapimac.h"
+#include "game.h"
 #include "sprites.h"
 
-void drawTerrain(Level map);
+void drawTerrain(Level l);
 
 #endif /* obstacles_h */
