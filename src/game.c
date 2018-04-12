@@ -1,7 +1,7 @@
 #include "../include/game.h"
 
 #define MAX_SPEED 1
-#define DRAG 0.95
+#define DRAG 0.99
 
 Game *initGame() {
     Game *gm;
@@ -18,13 +18,17 @@ Game *initGame() {
     gm->player->next = NULL;
     
     // set world
-    loadWorld("image.ppm", gm);
-    gm->level->progress = 0;
+    if(loadWorld("map.ppm", gm) != 0){
+        printf(ERR_LOADWORLD);
+        return NULL;
+    }
     
     return gm;
 }
 
 void updateGame(Game *gm) {
+    gm->level->progress += 0.1;
+    
     // position
     gm->player->px += gm->player->vx;
     gm->player->py += gm->player->vy;
@@ -53,7 +57,7 @@ void changeXYSpeedBy(Mob *player, float vx, float vy) {
 
 
 #define PPM_MAGIC_NUM "P6"
-
+#define OTHER_PPM_MAGIC_NUM "P3"
 /* LOAD WORLD DATA
  * ===============
  * @params: world-data file (.ppm) and references to an empty world, and moblists
@@ -83,7 +87,7 @@ int loadWorld(char *path, Game *gm) {
         return 3;
     };
     
-    if(strcmp(PPM_MAGIC_NUM, buff)) {
+    if(strcmp(PPM_MAGIC_NUM, buff) && strcmp(OTHER_PPM_MAGIC_NUM, buff)) {
         printf(ERR_FILE_FORMAT, path);
         return 2;
     }
@@ -101,32 +105,41 @@ int loadWorld(char *path, Game *gm) {
     
     // read data
     unsigned int r = 0, g = 0, b = 0;
+    MobList tmp;
     
-    for (unsigned int x = 0; x < width; x++){
-        for (unsigned int y = 0; y < height; y++) {
+    for (unsigned int y = 0; y < height; y++)
+        for (unsigned int x = 0; x < width; x++){
             // get pixel
             if(fscanf(in, "%d %d %d", &r, &g, &b) == EOF) {
                 printf(ERR_FILE_END, path);
                 return 3;
             };
             
+            // empty space
+            if (r == max && b == max && g == max) continue;
+            
             // obstacle
-            gm->level->map[x][y] = r;
+            gm->level->map[y][x] = (g == 0 && b == 0)? r : 0;
             
             // enemy
-            if (r == 0 && g == max && b == 0) {
-                if ((*(gm->enemies) = allocMob(ENEMY, x, y))!= NULL)
-                    gm->enemies = &(*(gm)->enemies)->next;
+            if (b == 0 && r == 0) {
+                if ((tmp = allocMob(ENEMY, x/(float) width, y/(float) height))!= NULL){
+                    tmp->next = gm->enemies;
+                    gm->enemies = tmp;
+                }
                 else return 3;
             }
             
             // bonus
-            if (r == 0 && g == 0 && b == max) {
-                if ((*(gm->bonuses) = allocMob(BONUS, x, y))!= NULL)
-                    gm->bonuses = &(*(gm)->bonuses)->next;
+            if (g== 0 && r == 0) {
+                if ((tmp = allocMob(BONUS, x/(float) width, y/(float) height))!= NULL) {
+                    tmp->next = gm->bonuses;
+                    gm->bonuses = tmp;
+                }
                 else return 3;
             }
         }
-    }
+    
+    fclose(in);
     return 0;
 }

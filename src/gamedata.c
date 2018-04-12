@@ -15,7 +15,7 @@ Level* allocLevel(unsigned int width, unsigned int height) {
     if (new->map == NULL) HANDLE_MALLOC;
     
     // allocate map rows
-    for (unsigned int i = 0; i < width; i++) {
+    for (unsigned int i = 0; i < height; i++) {
         new->map[i] = (unsigned int*) calloc(width, sizeof(unsigned int));
         if (new->map[i] == NULL) HANDLE_MALLOC;
     }
@@ -38,13 +38,15 @@ Mob* allocMob(unsigned char type, float x, float y) {
 Game* allocGame() {
     Game *new = (Game *) malloc(sizeof(Game));
     new->player = (Mob*) malloc(sizeof(Mob));
+    new->enemies = NULL;
+    new->bonuses = NULL;
     if(new == NULL || new->player == NULL) HANDLE_MALLOC;
     return new;
 }
 
-void freeMob(MobList *mob) {
-    Mob *tmp = *mob;
-    *mob = tmp->next;
+void freeMob(MobList mob) {
+    Mob *tmp = mob;
+    mob = tmp->next;
     free(tmp);
 }
 

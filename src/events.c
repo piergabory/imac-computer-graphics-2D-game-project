@@ -30,11 +30,11 @@ int eventLoop(Mob *player) {
                     break;
                     
                 case SDLK_q: case SDLK_LEFT:
-                    changeXYSpeedBy(player, -0.001, 0);
+                    changeXYSpeedBy(player, -0.0001, 0);
                     break;
                     
                 case SDLK_d: case SDLK_RIGHT:
-                    changeXYSpeedBy(player, 0.001, 0);
+                    changeXYSpeedBy(player, 0.0001, 0);
                     break;
             }
             break;

@@ -16,14 +16,11 @@ int main(void) {
     // initialise SDL and show a new window on screen
     if (!initWindow(&window, WINDOW_TITLE)) return 0;
     
-    flapimac = initGame();
-
-    // start main loop, updating the screen at a set refresh rate
-    // - see draw(), static function in draw.h
+    if ((flapimac = initGame()) == NULL) return 0;
     initView();
     
-    int loopStatus = 1;
-    while (loopStatus) {
+    // start main loop, updating the screen at a set refresh rate
+    do {
         Uint32 startTime = SDL_GetTicks();
         glClear(GL_COLOR_BUFFER_BIT);
         
@@ -31,9 +28,6 @@ int main(void) {
         
         // execute draw
         draw(*flapimac);
-        
-        // manages events
-        loopStatus = eventLoop(flapimac->player);
         
         // swap window
         SDL_GL_SwapWindow(window);
@@ -43,7 +37,7 @@ int main(void) {
         if(elapsedTime < FRAMERATE_MILLISECONDS) {
             SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
         }
-    }
+    } while (eventLoop(flapimac->player));
     
     // free SDL ressources once the loop ended
     SDL_Quit();

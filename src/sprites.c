@@ -1,6 +1,6 @@
 #include "../include/sprites.h"
 
-#define SPRITES_COUNT 2
+#define SPRITES_COUNT 4
 #define TEXTURE_FILE "textures.png"
 #define TEXTURE_COL 8
 #define TEXTURE_ROW 8
@@ -31,7 +31,8 @@ int initSprites() {
     
     /*~~~~~~~Texture loading~~~~~~~*/
     // image data loading
-    if((image = (SDL_Surface*)IMG_Load(TEXTURE_FILE)) == NULL){
+    image = (SDL_Surface*)IMG_Load(TEXTURE_FILE);
+    if(image == NULL){
         printf(ERR_FILE_OPEN, TEXTURE_FILE);
         return 0;
     }
