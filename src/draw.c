@@ -8,16 +8,15 @@ void draw(Game gm) {
     glPushMatrix();
     glScalef(1.0/gm.level->width, 1.0/gm.level->height, 1.0);
     
+    // paint terrain
     glPushMatrix();
     glTranslatef(-(gm.level->progress+=0.001),0,0);
     drawTerrain(*(gm.level));
     glPopMatrix();
     
+    // paint player
     glTranslatef(gm.player->px * gm.level->width, gm.player->py * gm.level->height,0);
     drawSprite(SPRITE_PLAYER);
-    /*
-        DRAWING CODE GOES HERE
-     */
     
     glPopMatrix();
 }
