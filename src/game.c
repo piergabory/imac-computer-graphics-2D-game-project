@@ -6,12 +6,7 @@
 Game *initGame() {
     Game *gm;
     
-    gm = (Game *) malloc(sizeof(Game));
-    
-    gm->level = (Level *) malloc(sizeof(Level));
-    gm->enemies = (MobList*) malloc(sizeof(MobList));
-    gm->bonuses = (MobList*) malloc(sizeof(MobList));
-    gm->player = (Mob*) malloc(sizeof(Mob));
+    gm = allocGame();
     
     // set player
     gm->player->px = 0;
@@ -57,23 +52,6 @@ void changeXYSpeedBy(Mob *player, float vx, float vy) {
 }
 
 
-MobList allocMob(unsigned char type, float x, float y) {
-    MobList new = (MobList)malloc(sizeof(Mob));
-    if (new == NULL) {
-        printf(ERR_MALLOC);
-        return NULL;
-    }
-    
-    new->px = x;
-    new->py = y;
-    new->type = type;
-    new->next = NULL;
-    
-    return new;
-}
-
-
-
 #define PPM_MAGIC_NUM "P6"
 
 /* LOAD WORLD DATA
@@ -98,7 +76,6 @@ int loadWorld(char *path, Game *gm) {
         return 1;
     };
     
-    
     // check for file type
     char buff[32];
     if(fscanf(in,"%s",buff) == EOF) {
@@ -113,34 +90,20 @@ int loadWorld(char *path, Game *gm) {
     
     
     // read metadata (image width/height, max pixel value)
-    unsigned int max = 1;
-    if(fscanf(in, "%d %d %d", &(gm->level->width), &(gm->level->height), &max) == EOF) {
+    unsigned int max = 1, width, height;
+    if(fscanf(in, "%d %d %d", &width, &height, &max) == EOF) {
         printf(ERR_FILE_END, path);
         return 3;
     };
     
-    // allocate memory
-    // obstacle map rows
-    gm->level->map = (int**)calloc(gm->level->width, sizeof(int*));
-    if (gm->level->map == NULL) {
-        printf(ERR_MALLOC);
-        return 4;
-    }
-    
+    gm->level = allocLevel(width, height);
+   
     
     // read data
     unsigned int r = 0, g = 0, b = 0;
     
-    for (int x = 0; x < gm->level->width; x++){
-        
-        // allocate memory for obstacle map columns
-        gm->level->map[x] = (int*)calloc(gm->level->height, sizeof(int));
-        if (gm->level->map == NULL) {
-            printf(ERR_MALLOC);
-            return 4;
-        }
-        
-        for (int y = 0; y < gm->level->height; y++) {
+    for (unsigned int x = 0; x < width; x++){
+        for (unsigned int y = 0; y < height; y++) {
             // get pixel
             if(fscanf(in, "%d %d %d", &r, &g, &b) == EOF) {
                 printf(ERR_FILE_END, path);
@@ -155,7 +118,6 @@ int loadWorld(char *path, Game *gm) {
                 if ((*(gm->enemies) = allocMob(ENEMY, x, y))!= NULL)
                     gm->enemies = &(*(gm)->enemies)->next;
                 else return 3;
-                
             }
             
             // bonus
