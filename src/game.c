@@ -18,8 +18,10 @@ Game *initGame() {
     gm->player->next = NULL;
     
     // set world
-    loadWorld("image.ppm", gm);
-    gm->level->progress = 0;
+    if(loadWorld("map.ppm", gm) != 0){
+        printf(ERR_LOADWORLD);
+        return NULL;
+    }
     
     return gm;
 }
@@ -53,7 +55,7 @@ void changeXYSpeedBy(Mob *player, float vx, float vy) {
 
 
 #define PPM_MAGIC_NUM "P6"
-
+#define OTHER_PPM_MAGIC_NUM "P3"
 /* LOAD WORLD DATA
  * ===============
  * @params: world-data file (.ppm) and references to an empty world, and moblists
@@ -83,7 +85,7 @@ int loadWorld(char *path, Game *gm) {
         return 3;
     };
     
-    if(strcmp(PPM_MAGIC_NUM, buff)) {
+    if(strcmp(PPM_MAGIC_NUM, buff) && strcmp(OTHER_PPM_MAGIC_NUM, buff)) {
         printf(ERR_FILE_FORMAT, path);
         return 2;
     }
