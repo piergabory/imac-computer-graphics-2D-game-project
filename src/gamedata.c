@@ -38,13 +38,15 @@ Mob* allocMob(unsigned char type, float x, float y) {
 Game* allocGame() {
     Game *new = (Game *) malloc(sizeof(Game));
     new->player = (Mob*) malloc(sizeof(Mob));
+    new->enemies = NULL;
+    new->bonuses = NULL;
     if(new == NULL || new->player == NULL) HANDLE_MALLOC;
     return new;
 }
 
-void freeMob(MobList *mob) {
-    Mob *tmp = *mob;
-    *mob = tmp->next;
+void freeMob(MobList mob) {
+    Mob *tmp = mob;
+    mob = tmp->next;
     free(tmp);
 }
 

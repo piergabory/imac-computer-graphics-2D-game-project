@@ -30,8 +30,8 @@ typedef struct mobile {
 // main structure
 typedef struct game{
     Level *level;
-    MobList *enemies;
-    MobList *bonuses;
+    MobList enemies;
+    MobList bonuses;
     Mob *player;
 } Game;
 
@@ -41,7 +41,7 @@ Mob* allocMob(unsigned char type, float x, float y);
 Game* allocGame();
 
 // Memory de-allocation
-void freeMob(MobList *mob);
+void freeMob(MobList mob);
 void freeGame(Game gm);
 
 #endif /* gamedata_h */

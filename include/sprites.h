@@ -6,6 +6,8 @@
 
 #define SPRITE_WALL 0
 #define SPRITE_PLAYER 1
+#define SPRITE_ENEMY 2
+#define SPRITE_BONUS 3
 
 /* INIT SPRITES
  * ============
