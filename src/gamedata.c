@@ -15,7 +15,7 @@ Level* allocLevel(unsigned int width, unsigned int height) {
     if (new->map == NULL) HANDLE_MALLOC;
     
     // allocate map rows
-    for (unsigned int i = 0; i < width; i++) {
+    for (unsigned int i = 0; i < height; i++) {
         new->map[i] = (unsigned int*) calloc(width, sizeof(unsigned int));
         if (new->map[i] == NULL) HANDLE_MALLOC;
     }

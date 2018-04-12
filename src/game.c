@@ -104,16 +104,19 @@ int loadWorld(char *path, Game *gm) {
     // read data
     unsigned int r = 0, g = 0, b = 0;
     
-    for (unsigned int x = 0; x < width; x++){
-        for (unsigned int y = 0; y < height; y++) {
+    for (unsigned int y = 0; y < height; y++)
+        for (unsigned int x = 0; x < width; x++){
             // get pixel
             if(fscanf(in, "%d %d %d", &r, &g, &b) == EOF) {
                 printf(ERR_FILE_END, path);
                 return 3;
             };
             
+            // empty space
+            if (r == max && b == max && g == max) continue;
+            
             // obstacle
-            gm->level->map[x][y] = r;
+            gm->level->map[y][x] = (g == 0 && b == 0)? r : 0;
             
             // enemy
             if (r == 0 && g == max && b == 0) {
