@@ -6,7 +6,7 @@ void drawTerrain(Level l){
             glPushMatrix();
             glTranslatef(x+0.5,y+0.5,0);
         
-            if (l.map[y][x] != 0)
+            if (l.map[y][x] == 0)
                 drawSprite(SPRITE_WALL);
         
             glPopMatrix();
