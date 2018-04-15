@@ -21,7 +21,6 @@ typedef struct level {
 
 // definition of any moving entity (player, enemy, projectiles etc..)
 typedef struct mobile {
-    float ay, ax;
     float vy, vx;
     float py, px;
     unsigned char type;
@@ -43,7 +42,7 @@ Mob* allocMob(unsigned char type, float x, float y);
 Game* allocGame();
 
 // Memory de-allocation
-void freeMob(MobList mob);
+void freeMob(MobList *mob);
 void freeGame(Game gm);
 
 #endif /* gamedata_h */

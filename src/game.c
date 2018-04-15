@@ -26,14 +26,17 @@ int initGame() {
     gm->player->type = PLAYER;
     gm->player->next = NULL;
     
+    
+    // set mob lists
+    gm->enemies = NULL;
+    gm->bonuses = NULL;
+    gm->projectiles = NULL;
+    
     // set level, ennemies and bonuses
     if(loadWorld("map.ppm", gm) != 0){
         printf(ERR_LOADWORLD);
         return 0;
     }
-    
-    // set projectiles
-    gm->projectiles = NULL;
     
     return 1;
 }
@@ -47,16 +50,21 @@ void updateGame() {
         printf("ouch!\n");
     }
     
-    Mob *current = gm->enemies;
-    while (current != NULL) {
-        updateEnnemy(current);
-        current = current->next;
+    MobList *current = &(gm->enemies);
+    while (*current != NULL) {
+        updateEnnemy(*current);
+        current = &((*current)->next);
     }
     
-    current = gm->projectiles;
-    while (current != NULL) {
-        updateProjectile(current);
-        current = current->next;
+    current = &(gm->projectiles);
+    while (*current != NULL) {
+        if(isMobOnTerrain(**current, *(gm->level))) {
+            freeMob(current);
+        }
+        else {
+            updateProjectile(*current);
+            current = &((*current)->next);
+        }
     }
 }
 
