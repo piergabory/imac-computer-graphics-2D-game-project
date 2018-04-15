@@ -31,6 +31,10 @@ void updateGame() {
     
     updatePlayer(gm->player);
     
+    if(isMobOnTerrain(*(gm->player),*(gm->level))){
+        printf("ouch!\n");
+    }
+    
     Mob *current = gm->enemies;
     while (current != NULL) {
         updateEnnemy(current);

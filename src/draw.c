@@ -21,7 +21,7 @@ void draw(Game gm) {
     // paint terrain
     glPushMatrix();
     glTranslatef(-(gm.level->progress),0,0);
-    drawTerrain(*(gm.level));
+    drawTerrain(*(gm.level), getViewportWidth(), getViewportHeight());
     glPopMatrix();
     
     // paint player
