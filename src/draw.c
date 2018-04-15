@@ -50,7 +50,7 @@ void initView() {
     initSprites();
     
     // set sky color
-    glClearColor(0.5, 0.7, 1.0, 1.0);
+    glClearColor(0.0, 0.0, 0.1, 1.0);
     
     // enable transparency
     glEnable(GL_BLEND);
