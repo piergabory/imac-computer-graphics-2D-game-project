@@ -20,28 +20,23 @@ void draw(Game gm) {
     drawSprite(SPRITE_PLAYER);
     glPopMatrix();
     
-    // paint ennemies
-    Mob *ennemy = gm.enemies;
-    while (ennemy != NULL) {
-        glPushMatrix();
-        glTranslatef(ennemy->px * gm.level->width - gm.level->progress, ennemy->py * gm.level->height,0);
-        drawSprite(SPRITE_ENEMY);
-        ennemy = ennemy->next;
-        glPopMatrix();
-    }
-    
-    // paint bonuses
-    Mob *bonus = gm.bonuses;
-    while (bonus != NULL) {
-        glPushMatrix();
-        glTranslatef(bonus->px * gm.level->width - gm.level->progress, bonus->py * gm.level->height,0);
-        drawSprite(SPRITE_BONUS);
-        bonus = bonus->next;
-        glPopMatrix();
-    }
+    drawMobList(gm.bonuses, gm.level, SPRITE_BONUS);
+    drawMobList(gm.enemies, gm.level, SPRITE_ENEMY);
+    drawMobList(gm.projectiles, gm.level, SPRITE_PROJECTILE);
     
     glPopMatrix();
 }
+
+static void drawMobList(MobList list, Level level, int sprite) {
+    while (list != NULL) {
+        glPushMatrix();
+        glTranslatef(list->px * level.width - level.progress, list->py * level.height,0);
+        drawSprite(sprite);
+        list = list->next;
+        glPopMatrix();
+    }
+}
+
 
 /* INIT VIEW
  * ----------

@@ -17,6 +17,8 @@
  */
 void initView();
 
+static void drawMobList();
+
 /* DRAW LOOP
  * ---------
  * OpenGL code executed between each clearBuffer and swapBuffer.
