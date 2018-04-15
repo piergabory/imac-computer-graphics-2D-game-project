@@ -22,6 +22,16 @@ int initGame() {
     gm->bonuses = NULL;
     gm->projectiles = NULL;
     
+    
+
+
+
+
+    // set mob lists
+    gm->enemies = NULL;
+    gm->bonuses = NULL;
+    gm->projectiles = NULL;
+    
     // set level, ennemies and bonuses
     if(loadWorld("map.ppm", gm) != 0){
         printf(ERR_LOADWORLD);
@@ -42,7 +52,7 @@ int initGame() {
 }
 
 void updateGame() {
-    if (gm->level->progress < 1) gm->level->progress += PROGRESS_RATE;
+    if (gm->level->progress < 1 - gm->level->height/gm->level->width) gm->level->progress += PROGRESS_RATE;
     
     updatePlayer(gm->player);
     
