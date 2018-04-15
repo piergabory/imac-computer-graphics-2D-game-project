@@ -32,6 +32,7 @@ typedef struct game{
     Level *level;
     MobList enemies;
     MobList bonuses;
+    MobList projectiles;
     Mob *player;
 } Game;
 

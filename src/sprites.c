@@ -1,6 +1,5 @@
 #include "../include/sprites.h"
 
-#define SPRITES_COUNT 4
 #define TEXTURE_FILE "textures.png"
 #define TEXTURE_COL 8
 #define TEXTURE_ROW 8

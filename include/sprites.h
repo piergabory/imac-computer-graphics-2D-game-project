@@ -8,6 +8,9 @@
 #define SPRITE_PLAYER 1
 #define SPRITE_ENEMY 2
 #define SPRITE_BONUS 3
+#define SPRITE_PROJECTILE 4
+
+#define SPRITES_COUNT 5
 
 /* INIT SPRITES
  * ============
