@@ -1,8 +1,10 @@
-#include "../include/game.h"
-#include "../include/window.h"
-#include "../include/draw.h"
-#include "../include/events.h"
-#include "../include/messages.h"
+#include "../include/model/game.h"
+
+#include "../include/view/draw.h"
+#include "../include/view/events.h"
+
+#include "../include/support/window.h"
+#include "../include/support/messages.h"
 
 #define WINDOW_TITLE "Flap-imac"
 

@@ -3,8 +3,8 @@
 
 #include <math.h>
 
-#include "game.h"
-#include "sprites.h"
+#include "model/game.h"
+#include "view/sprites.h"
 
 void drawTerrain(Level l, unsigned int vw, unsigned int vh);
 

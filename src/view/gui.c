@@ -1,4 +1,4 @@
-#include "../include/gui.h"
+#include "../../include/view/gui.h"
 
 void drawHealthBar(int health) {
     glPushMatrix();

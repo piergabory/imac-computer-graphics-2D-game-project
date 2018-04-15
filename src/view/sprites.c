@@ -1,8 +1,4 @@
-#include "../include/sprites.h"
-
-#define TEXTURE_FILE "textures.png"
-#define TEXTURE_COL 8
-#define TEXTURE_ROW 8
+#include "../../include/view/sprites.h"
 
 static GLuint spritesGlus;
 

@@ -1,8 +1,12 @@
 #ifndef sprites_h
 #define sprites_h
 
-#include "frameworks.h"
-#include "messages.h"
+#include "support/frameworks.h"
+#include "support/messages.h"
+
+#define TEXTURE_FILE "textures.png"
+#define TEXTURE_COL 8
+#define TEXTURE_ROW 8
 
 #define SPRITE_WALL 0
 #define SPRITE_PLAYER 1

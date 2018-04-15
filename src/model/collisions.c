@@ -1,4 +1,4 @@
-#include "../include/collisions.h"
+#include "../../include/model/collisions.h"
 
 static void setHitbox(char mobType, float *w, float *h) {
     Level l = getLevel();

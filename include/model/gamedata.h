@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "messages.h"
+#include "support/messages.h"
 
 // structure collecting world obstacles and game progress
 typedef struct level {
