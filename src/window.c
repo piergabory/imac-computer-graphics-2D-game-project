@@ -28,18 +28,24 @@ int initWindow(SDL_Window **win, char* title) {
     }
     
     SDL_GL_CreateContext(*win);
-    updateViewport();
+    updateViewport(-1,-1);
     return 1;
 }
 
 
 /*  UPDATE VIEWPORT
  *  ---------------
+ *  @param: width and height, if negative or nul, current dimentions are preserved
  *  handles resizing of the window.
  *  Updates the projection matrix to keep proportions consistent
  *  and scales the space to fit the size of the window.
  */
-void updateViewport() {
+void updateViewport(int w, int h) {
+    if (w > 0 && h > 0) {
+        WINDOW_WIDTH = w;
+        WINDOW_HEIGHT = h;
+    }
+    
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();

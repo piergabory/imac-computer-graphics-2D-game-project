@@ -27,7 +27,7 @@ int initWindow(SDL_Window **win, char* title);
  *  Updates the projection matrix to keep proportions consistent
  *  and scales the space to fit the size of the window.
  */
-void updateViewport();
+void updateViewport(int w, int h);
 
 
 // window dimentions:

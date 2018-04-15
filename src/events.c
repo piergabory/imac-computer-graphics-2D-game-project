@@ -40,11 +40,8 @@ int eventLoop() {
             break;
             
         case SDL_WINDOWEVENT:
-            if(e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED){
-                WINDOW_WIDTH = e.window.data1;
-                WINDOW_HEIGHT = e.window.data2;
-                updateViewport();
-            }
+            if(e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+                updateViewport(e.window.data1,e.window.data2);
             break;
             
         default: break;
