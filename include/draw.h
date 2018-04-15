@@ -17,7 +17,7 @@
  */
 void initView();
 
-static void drawMobList();
+static void drawMobList(MobList list, Level level, float offset, int sprite);
 
 /* DRAW LOOP
  * ---------
