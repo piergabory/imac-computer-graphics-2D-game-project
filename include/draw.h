@@ -5,6 +5,7 @@
 #include "window.h"
 #include "sprites.h"
 #include "terrain.h"
+#include "gui.h"
 
 
 /* INIT VIEW

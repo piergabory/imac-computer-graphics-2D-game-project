@@ -38,6 +38,8 @@ void draw() {
     drawMobList(PROJECTILE, l, SPRITE_PROJECTILE);
     
     glPopMatrix();
+    
+    drawHealthBar(p.health);
 }
 
 
