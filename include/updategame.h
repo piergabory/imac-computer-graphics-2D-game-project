@@ -6,6 +6,7 @@
 #include "gamedata.h"
 
 #define DRAG 0.99
+#define PROGRESS_RATE 0.0003
 
 void updatePlayer(Mob *p);
 void updateEnnemy(Mob *e);

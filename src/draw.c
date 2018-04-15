@@ -1,10 +1,10 @@
 #include "../include/draw.h"
 
-static void drawMobList(char mob, Level level, float offset, int sprite) {
+static void drawMobList(char mob, Level level, int sprite) {
     MobList list = getMobList(mob);
     while (list != NULL) {
         glPushMatrix();
-        glTranslatef(list->px * level.width - offset, list->py * level.height,0);
+        glTranslatef(list->px * level.width, list->py * level.height,0);
         drawSprite(sprite);
         list = list->next;
         glPopMatrix();
@@ -21,12 +21,10 @@ void draw() {
     
     glPushMatrix();
     glScalef(1.0/l.height, 1.0/l.height, 1.0);
+    glTranslatef(-(l.progress * l.width),0,0);
     
     // paint terrain
-    glPushMatrix();
-    glTranslatef(-(l.progress),0,0);
     drawTerrain(l, getViewportWidth(), getViewportHeight());
-    glPopMatrix();
     
     // paint player
     glPushMatrix();
@@ -35,9 +33,9 @@ void draw() {
     glPopMatrix();
     
     // paint mobs (bonus, ennemy, projectile)
-    drawMobList(BONUS, l, l.progress, SPRITE_BONUS);
-    drawMobList(ENEMY, l, l.progress, SPRITE_ENEMY);
-    drawMobList(PROJECTILE, l, 0, SPRITE_PROJECTILE);
+    drawMobList(BONUS, l, SPRITE_BONUS);
+    drawMobList(ENEMY, l, SPRITE_ENEMY);
+    drawMobList(PROJECTILE, l, SPRITE_PROJECTILE);
     
     glPopMatrix();
 }

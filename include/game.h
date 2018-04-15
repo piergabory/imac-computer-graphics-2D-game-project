@@ -10,7 +10,6 @@
 #include "collisions.h"
 
 #define MAX_SPEED 1
-#define PROGRESS_RATE 0.01
 
 static Game *gm = NULL;
 

@@ -1,10 +1,10 @@
 #include "../include/collisions.h"
 
 int isMobOnTerrain(Mob m, Level l){
-    int mapColumn = m.px * l.width - l.progress;
+    int mapColumn = m.px * l.width;
     int mapRow = m.py * l.height;
-    if (l.map[mapColumn % l.height][mapRow % l.width] != 0){
-        l.map[mapColumn % l.height][mapRow % l.width] = 0;
+    if (l.map[mapRow % l.height][mapColumn % l.width] != 0){
+        l.map[mapRow % l.height][mapColumn % l.width] = 0;
         return 1;
     }
     return 0;

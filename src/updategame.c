@@ -2,7 +2,7 @@
 
 void updatePlayer(Mob *p) {
     // position
-    p->px += p->vx;
+    p->px += p->vx + PROGRESS_RATE;
     p->py += p->vy;
     
     // drag
@@ -28,6 +28,6 @@ void updateEnnemy(Mob *e) {
 
 void updateProjectile(Mob *p) {
     // position
-    p->px += p->vx;
+    p->px += p->vx + PROGRESS_RATE;
     p->py += p->vy;
 }
