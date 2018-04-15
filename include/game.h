@@ -16,9 +16,9 @@ Game *initGame();
 
 void updateGame();
 
-void changeXYSpeedBy(Mob *player, float vx, float vy);
+void changePlayerSpeedBy(float vx, float vy);
 
-
+void playerShoot();
 
 /* LOAD WORLD DATA
  * ===============
@@ -32,6 +32,6 @@ void changeXYSpeedBy(Mob *player, float vx, float vy);
  * Will handle the file loading, parsing and edit of the world and mobile lists
  */
 
-int loadWorld(char *path, Game *gm);
+int loadWorld(char *path);
 
 #endif /* flapimac_h */

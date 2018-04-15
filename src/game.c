@@ -1,8 +1,8 @@
 #include "../include/game.h"
 
+static Game *gm = NULL;
+
 Game *initGame() {
-    Game *gm;
-    
     gm = allocGame();
     
     // set player
@@ -15,7 +15,7 @@ Game *initGame() {
     gm->player->next = NULL;
     
     // set level, ennemies and bonuses
-    if(loadWorld("map.ppm", gm) != 0){
+    if(loadWorld("map.ppm") != 0){
         printf(ERR_LOADWORLD);
         return NULL;
     }
@@ -26,7 +26,7 @@ Game *initGame() {
     return gm;
 }
 
-void updateGame(Game *gm) {
+void updateGame() {
     gm->level->progress += 0.1;
     
     updatePlayer(gm->player);
@@ -44,9 +44,16 @@ void updateGame(Game *gm) {
     }
 }
 
-void changeXYSpeedBy(Mob *player, float vx, float vy) {
-    if (fabs(player->vx + vx) < MAX_SPEED) player->vx += vx;
-    if (fabs(player->vy + vy) < MAX_SPEED) player->vy += vy;
+void changePlayerSpeedBy(float vx, float vy) {
+    if (fabs(gm->player->vx + vx) < MAX_SPEED) gm->player->vx += vx;
+    if (fabs(gm->player->vy + vy) < MAX_SPEED) gm->player->vy += vy;
+}
+
+void playerShoot() {
+    Mob *tmp = gm->projectiles;
+    gm->projectiles = allocMob(PROJECTILE, gm->player->px, gm->player->py);
+    gm->projectiles->next = tmp;
+    gm->projectiles->vx = 0.001;
 }
 
 
@@ -64,7 +71,7 @@ void changeXYSpeedBy(Mob *player, float vx, float vy) {
  * Will handle the file loading, parsing and edit of the world and mobile lists
  */
 
-int loadWorld(char *path, Game *gm) {
+int loadWorld(char *path) {
     // TODO : Discard comments
     
     // attempts to open file
