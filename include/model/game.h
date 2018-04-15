@@ -3,7 +3,8 @@
 
 #include <stdio.h>
 
-#include "messages.h"
+#include "support/messages.h"
+
 #include "gamedata.h"
 #include "loadgame.h"
 #include "updategame.h"

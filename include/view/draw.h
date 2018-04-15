@@ -1,8 +1,9 @@
 #ifndef draw_h
 #define draw_h
 
-#include "game.h"
-#include "window.h"
+#include "model/game.h"
+#include "support/window.h"
+
 #include "sprites.h"
 #include "terrain.h"
 #include "gui.h"

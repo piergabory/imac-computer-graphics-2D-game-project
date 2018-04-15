@@ -1,8 +1,8 @@
 #ifndef events_h
 #define events_h
 
-#include "window.h"
-#include "game.h"
+#include "support/window.h"
+#include "model/game.h"
 
 /* EVENT LOOP
  * ----------

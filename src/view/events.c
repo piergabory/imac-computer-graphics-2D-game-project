@@ -1,4 +1,4 @@
-#include "../include/events.h"
+#include "../../include/view/events.h"
 
 /* EVENT LOOP
  * ----------

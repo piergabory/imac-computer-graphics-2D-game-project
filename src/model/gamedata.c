@@ -1,4 +1,4 @@
-#include "../include/gamedata.h"
+#include "../../include/model/gamedata.h"
 
 #define HANDLE_MALLOC {printf(ERR_MALLOC); return NULL;}
 

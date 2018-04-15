@@ -1,4 +1,4 @@
-#include "../include/window.h"
+#include "../../include/support/window.h"
 
 /*  INIT WINDOW
  *  ---------------
