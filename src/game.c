@@ -17,14 +17,10 @@ MobList getMobList(char mob) {
 int initGame() {
     gm = allocGame();
     
-    // set player
-    gm->player->px = 0;
-    gm->player->py = 0;
-    gm->player->vx = 0;
-    gm->player->vy = 0;
-    
-    gm->player->type = PLAYER;
-    gm->player->next = NULL;
+    // set mob lists
+    gm->enemies = NULL;
+    gm->bonuses = NULL;
+    gm->projectiles = NULL;
     
     // set level, ennemies and bonuses
     if(loadWorld("map.ppm", gm) != 0){
@@ -32,14 +28,21 @@ int initGame() {
         return 0;
     }
     
-    // set projectiles
-    gm->projectiles = NULL;
+    // set player
+    gm->player->px = 0.01;
+    gm->player->py = 0.5;
+    gm->player->vx = 0;
+    gm->player->vy = 0;
+    
+    gm->player->type = PLAYER;
+    gm->player->next = NULL;
+    
     
     return 1;
 }
 
 void updateGame() {
-    gm->level->progress += PROGRESS_RATE;
+    if (gm->level->progress < 1) gm->level->progress += PROGRESS_RATE;
     
     updatePlayer(gm->player);
     
@@ -47,16 +50,21 @@ void updateGame() {
         printf("ouch!\n");
     }
     
-    Mob *current = gm->enemies;
-    while (current != NULL) {
-        updateEnnemy(current);
-        current = current->next;
+    MobList *curr = &(gm->enemies);
+    while (*curr != NULL) {
+        updateEnnemy(*curr);
+        curr = &((*curr)->next);
     }
     
-    current = gm->projectiles;
-    while (current != NULL) {
-        updateProjectile(current);
-        current = current->next;
+    curr = &(gm->projectiles);
+    while (*curr != NULL) {
+        if(isMobOnTerrain(**curr, *(gm->level)) || (*curr)->px > 1) {
+            freeMob(curr);
+        }
+        else {
+            updateProjectile(*curr);
+            curr = &((*curr)->next);
+        }
     }
 }
 

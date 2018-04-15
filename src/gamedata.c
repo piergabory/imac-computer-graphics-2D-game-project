@@ -44,10 +44,11 @@ Game* allocGame() {
     return new;
 }
 
-void freeMob(MobList mob) {
-    Mob *tmp = mob;
-    mob = tmp->next;
+void freeMob(MobList *mob) {
+    Mob *tmp = *mob;
+    *mob = ((**mob).next);
     free(tmp);
+    tmp = NULL;
 }
 
 void freeGame(Game gm) {
@@ -56,10 +57,10 @@ void freeGame(Game gm) {
     
     // free mobs
     while (gm.enemies == NULL)
-        freeMob(gm.enemies);
+        freeMob(&(gm.enemies));
     
     while (gm.bonuses == NULL)
-        freeMob(gm.bonuses);
+        freeMob(&(gm.bonuses));
     
     // free map
     for (unsigned int i = 0; i < gm.level->height; i++) {
