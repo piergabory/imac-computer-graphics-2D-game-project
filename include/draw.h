@@ -21,6 +21,6 @@ void initView();
  * ---------
  * OpenGL code executed between each clearBuffer and swapBuffer.
  */
-void draw(Game gm);
+void draw();
 
 #endif /* draw_h */

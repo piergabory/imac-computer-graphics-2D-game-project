@@ -9,10 +9,16 @@
 #include "updategame.h"
 #include "collisions.h"
 
+#define MAX_SPEED 1
+#define PROGRESS_RATE 0.01
 
-// Game logic
+static Game *gm = NULL;
 
-Game *initGame();
+Level getLevel();
+Mob getPlayer();
+MobList getMobList(char mob);
+
+int initGame();
 
 void updateGame();
 

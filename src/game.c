@@ -1,8 +1,20 @@
 #include "../include/game.h"
 
-static Game *gm = NULL;
+Level getLevel() {return *(gm->level); }
 
-Game *initGame() {
+Mob getPlayer() { return *(gm->player); }
+
+MobList getMobList(char mob) {
+    switch (mob) {
+        case 'e': return gm->enemies;
+        case 'b': return gm->bonuses;
+        case 'j': return gm->projectiles;
+        case 'p': return gm->player;
+        default: return NULL;
+    }
+}
+
+int initGame() {
     gm = allocGame();
     
     // set player
@@ -17,17 +29,17 @@ Game *initGame() {
     // set level, ennemies and bonuses
     if(loadWorld("map.ppm", gm) != 0){
         printf(ERR_LOADWORLD);
-        return NULL;
+        return 0;
     }
     
     // set projectiles
     gm->projectiles = NULL;
     
-    return gm;
+    return 1;
 }
 
 void updateGame() {
-    gm->level->progress += 0.1;
+    gm->level->progress += PROGRESS_RATE;
     
     updatePlayer(gm->player);
     

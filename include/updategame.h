@@ -5,7 +5,6 @@
 
 #include "gamedata.h"
 
-#define MAX_SPEED 1
 #define DRAG 0.99
 
 void updatePlayer(Mob *p);

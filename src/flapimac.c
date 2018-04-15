@@ -11,12 +11,11 @@ static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 
 int main(void) {
     SDL_Window *window = NULL;
-    Game *flapimac;
     
     // initialise SDL and show a new window on screen
     if (!initWindow(&window, WINDOW_TITLE)) return 0;
     
-    if ((flapimac = initGame()) == NULL) return 0;
+    if (!initGame()) return 0;
     initView();
     
     // start main loop, updating the screen at a set refresh rate
@@ -24,10 +23,10 @@ int main(void) {
         Uint32 startTime = SDL_GetTicks();
         glClear(GL_COLOR_BUFFER_BIT);
         
-        updateGame(flapimac);
+        updateGame();
         
         // execute draw
-        draw(*flapimac);
+        draw();
         
         // swap window
         SDL_GL_SwapWindow(window);
@@ -37,7 +36,7 @@ int main(void) {
         if(elapsedTime < FRAMERATE_MILLISECONDS) {
             SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
         }
-    } while (eventLoop(flapimac->player));
+    } while (eventLoop());
     
     // free SDL ressources once the loop ended
     SDL_Quit();

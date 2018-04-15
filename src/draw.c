@@ -1,6 +1,7 @@
 #include "../include/draw.h"
 
-static void drawMobList(MobList list, Level level, float offset, int sprite) {
+static void drawMobList(char mob, Level level, float offset, int sprite) {
+    MobList list = getMobList(mob);
     while (list != NULL) {
         glPushMatrix();
         glTranslatef(list->px * level.width - offset, list->py * level.height,0);
@@ -14,26 +15,29 @@ static void drawMobList(MobList list, Level level, float offset, int sprite) {
  * ---------
  * OpenGL code executed between each clearBuffer and swapBuffer.
  */
-void draw(Game gm) {
+void draw() {
+    Level l = getLevel();
+    Mob p = getPlayer();
+    
     glPushMatrix();
-    glScalef(1.0/gm.level->height, 1.0/gm.level->height, 1.0);
+    glScalef(1.0/l.height, 1.0/l.height, 1.0);
     
     // paint terrain
     glPushMatrix();
-    glTranslatef(-(gm.level->progress),0,0);
-    drawTerrain(*(gm.level), getViewportWidth(), getViewportHeight());
+    glTranslatef(-(l.progress),0,0);
+    drawTerrain(l, getViewportWidth(), getViewportHeight());
     glPopMatrix();
     
     // paint player
     glPushMatrix();
-    glTranslatef(gm.player->px * gm.level->width, gm.player->py * gm.level->height,0);
+    glTranslatef(p.px * l.width, p.py * l.height,0);
     drawSprite(SPRITE_PLAYER);
     glPopMatrix();
     
     // paint mobs (bonus, ennemy, projectile)
-    drawMobList(gm.bonuses, *(gm.level), gm.level->progress, SPRITE_BONUS);
-    drawMobList(gm.enemies, *(gm.level), gm.level->progress, SPRITE_ENEMY);
-    drawMobList(gm.projectiles, *(gm.level), 0, SPRITE_PROJECTILE);
+    drawMobList(BONUS, l, l.progress, SPRITE_BONUS);
+    drawMobList(ENEMY, l, l.progress, SPRITE_ENEMY);
+    drawMobList(PROJECTILE, l, 0, SPRITE_PROJECTILE);
     
     glPopMatrix();
 }
