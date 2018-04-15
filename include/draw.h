@@ -17,8 +17,6 @@
  */
 void initView();
 
-static void drawMobList(MobList list, Level level, float offset, int sprite);
-
 /* DRAW LOOP
  * ---------
  * OpenGL code executed between each clearBuffer and swapBuffer.

@@ -1,5 +1,15 @@
 #include "../include/draw.h"
 
+static void drawMobList(MobList list, Level level, float offset, int sprite) {
+    while (list != NULL) {
+        glPushMatrix();
+        glTranslatef(list->px * level.width - offset, list->py * level.height,0);
+        drawSprite(sprite);
+        list = list->next;
+        glPopMatrix();
+    }
+}
+
 /* DRAW LOOP
  * ---------
  * OpenGL code executed between each clearBuffer and swapBuffer.
@@ -28,15 +38,7 @@ void draw(Game gm) {
     glPopMatrix();
 }
 
-static void drawMobList(MobList list, Level level, float offset, int sprite) {
-    while (list != NULL) {
-        glPushMatrix();
-        glTranslatef(list->px * level.width - offset, list->py * level.height,0);
-        drawSprite(sprite);
-        list = list->next;
-        glPopMatrix();
-    }
-}
+
 
 
 /* INIT VIEW
