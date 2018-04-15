@@ -1,4 +1,4 @@
-#include "../../include/view/terrain.h"
+#include "view/terrain.h"
 
 // to be able to see the blocs poping in and out on the left and right borders
 #define DEBUG_MARGIN 0

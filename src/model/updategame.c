@@ -1,4 +1,4 @@
-#include "../../include/model/updategame.h"
+#include "model/updategame.h"
 
 void updatePlayer(Mob *p) {
     // position

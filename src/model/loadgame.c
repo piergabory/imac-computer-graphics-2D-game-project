@@ -1,4 +1,4 @@
-#include "../../include/model/loadgame.h"
+#include "model/loadgame.h"
 
 /* LOAD WORLD DATA
  * ===============

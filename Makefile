@@ -6,7 +6,7 @@ APP_BIN = flapimac
 
 SRC_PATH = src
 OBJ_PATH = obj
-INC_PATH = -I include
+INC_PATH = -I include/
 BIN_PATH = bin
 LIB_PATH = lib
 

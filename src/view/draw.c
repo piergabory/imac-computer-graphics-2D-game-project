@@ -1,4 +1,4 @@
-#include "../../include/view/draw.h"
+#include "view/draw.h"
 
 static void drawMobList(char mob, Level level, int sprite) {
     MobList list = getMobList(mob);

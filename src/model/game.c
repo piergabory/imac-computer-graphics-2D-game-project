@@ -1,4 +1,4 @@
-#include "../../include/model/game.h"
+#include "model/game.h"
 
 Level getLevel() {return *(gm->level); }
 

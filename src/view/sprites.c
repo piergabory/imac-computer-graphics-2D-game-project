@@ -1,4 +1,4 @@
-#include "../../include/view/sprites.h"
+#include "view/sprites.h"
 
 static GLuint spritesGlus;
 
