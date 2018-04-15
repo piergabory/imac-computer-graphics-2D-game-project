@@ -12,6 +12,6 @@
  * - QUIT: set loopStatus to 0 so the main loop stops and the program ends.
  * - WINDOW IS RESIZED: collects new width and height and update the window (see window.h)
  */
-int eventLoop(Mob *player);
+int eventLoop();
 
 #endif /* events_h */

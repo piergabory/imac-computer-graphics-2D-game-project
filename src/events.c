@@ -8,7 +8,7 @@
  * - QUIT: set loopStatus to 0 so the main loop stops and the program ends.
  * - WINDOW IS RESIZED: collects new width and height and update the window (see window.h)
  */
-int eventLoop(Mob *player) {
+int eventLoop() {
     SDL_Event e;
     while(SDL_PollEvent(&e)) switch(e.type) {
         case SDL_QUIT:
@@ -18,23 +18,23 @@ int eventLoop(Mob *player) {
         case SDL_KEYDOWN :
             switch (e.key.keysym.sym) {
                 case SDLK_SPACE:
-                    printf("bang!\n");
+                    playerShoot();
                     break;
                     
                 case SDLK_z: case SDLK_UP:
-                    changeXYSpeedBy(player, 0, 0.005);
+                    changePlayerSpeedBy(0, 0.005);
                     break;
                     
                 case SDLK_s: case SDLK_DOWN:
-                    changeXYSpeedBy(player, 0, -0.005);
+                    changePlayerSpeedBy(0, -0.005);
                     break;
                     
                 case SDLK_q: case SDLK_LEFT:
-                    changeXYSpeedBy(player, -0.0001, 0);
+                    changePlayerSpeedBy(-0.0001, 0);
                     break;
                     
                 case SDLK_d: case SDLK_RIGHT:
-                    changeXYSpeedBy(player, 0.0001, 0);
+                    changePlayerSpeedBy(0.0001, 0);
                     break;
             }
             break;
