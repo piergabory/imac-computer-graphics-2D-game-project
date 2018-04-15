@@ -5,6 +5,7 @@
 #define BONUS 'b'
 #define OBSTACLE 'o'
 #define PLAYER 'p'
+#define PROJECTILE 'j'
 
 #include <stdlib.h>
 #include <stdio.h>
