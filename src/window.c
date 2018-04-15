@@ -28,7 +28,7 @@ int initWindow(SDL_Window **win, char* title) {
     }
     
     SDL_GL_CreateContext(*win);
-    updateViewport(-1,-1);
+    updateViewport(UNDEFINED_DIMENTION,UNDEFINED_DIMENTION);
     return 1;
 }
 

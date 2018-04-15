@@ -7,6 +7,8 @@
 #define WINDOW_DEFAULT_WIDTH    800
 #define WINDOW_DEFAULT_HEIGHT   600
 
+#define UNDEFINED_DIMENTION -1
+
 
 /*  INIT WINDOW
  *  ---------------
