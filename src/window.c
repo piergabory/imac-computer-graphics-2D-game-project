@@ -56,3 +56,6 @@ void updateViewport() {
     GLKMatrix4 orthoMat = GLKMatrix4MakeOrtho(0, vwr, vhr, 0, -1.0f, 1.0f);
     glLoadMatrixf(orthoMat.m);
 }
+
+unsigned int getViewportWidth() { return WINDOW_WIDTH; }
+unsigned int getViewportHeight() { return WINDOW_HEIGHT; }

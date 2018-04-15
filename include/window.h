@@ -34,4 +34,8 @@ void updateViewport();
 static unsigned int WINDOW_WIDTH = WINDOW_DEFAULT_WIDTH;
 static unsigned int WINDOW_HEIGHT = WINDOW_DEFAULT_HEIGHT;
 
+// getter
+unsigned int getViewportWidth();
+unsigned int getViewportHeight();
+
 #endif /* window_init_h */
