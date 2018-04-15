@@ -1,8 +1,5 @@
 #include "../include/game.h"
 
-#define MAX_SPEED 1
-#define DRAG 0.99
-
 Game *initGame() {
     Game *gm;
     
@@ -17,11 +14,14 @@ Game *initGame() {
     gm->player->type = PLAYER;
     gm->player->next = NULL;
     
-    // set world
+    // set level, ennemies and bonuses
     if(loadWorld("map.ppm", gm) != 0){
         printf(ERR_LOADWORLD);
         return NULL;
     }
+    
+    // set projectiles
+    gm->projectiles = NULL;
     
     return gm;
 }
@@ -29,24 +29,18 @@ Game *initGame() {
 void updateGame(Game *gm) {
     gm->level->progress += 0.1;
     
-    // position
-    gm->player->px += gm->player->vx;
-    gm->player->py += gm->player->vy;
+    updatePlayer(gm->player);
     
-    // drag
-    gm->player->vx *= DRAG;
-    gm->player->vy *= DRAG;
-    
-    
-    // bounce on borders
-    if (gm->player->px > 1 || gm->player->px < 0) {
-        gm->player->vx *= -1;
-        gm->player->px = roundf(gm->player->px);
+    Mob *current = gm->enemies;
+    while (current != NULL) {
+        updateEnnemy(current);
+        current = current->next;
     }
     
-    if (gm->player->py > 1 || gm->player->py < 0) {
-        gm->player->vy *= -1;
-        gm->player->py = roundf(gm->player->py);
+    current = gm->projectiles;
+    while (current != NULL) {
+        updateProjectile(current);
+        current = current->next;
     }
 }
 

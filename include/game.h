@@ -3,9 +3,9 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
 
 #include "gamedata.h"
+#include "updategame.h"
 #include "messages.h"
 
 // Game logic
