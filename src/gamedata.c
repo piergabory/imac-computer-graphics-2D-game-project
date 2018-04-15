@@ -29,6 +29,7 @@ Mob* allocMob(unsigned char type, float x, float y) {
     
     new->px = x;
     new->py = y;
+    new->health = 1;
     new->type = type;
     new->next = NULL;
     

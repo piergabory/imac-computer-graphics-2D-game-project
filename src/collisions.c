@@ -1,26 +1,29 @@
 #include "../include/collisions.h"
 
 static void setHitbox(char mobType, float *w, float *h) {
-    float scale = 1/getLevel().height;
+    Level l = getLevel();
+    float scalex = 0.5/l.width;
+    float scaley = 0.5/l.height;
+    
     switch (mobType) {
         case ENEMY:
-            *w = scale * ENEMY_W;
-            *h = scale * ENEMY_H;
+            *w = scalex * ENEMY_W;
+            *h = scaley * ENEMY_H;
             break;
             
         case PLAYER:
-            *w = scale * PLAYER_W;
-            *h = scale * PLAYER_H;
+            *w = scalex * PLAYER_W;
+            *h = scaley * PLAYER_H;
             break;
             
         case BONUS:
-            *w = scale * BONUS_W;
-            *h = scale * BONUS_H;
+            *w = scalex * BONUS_W;
+            *h = scaley * BONUS_H;
             break;
             
         case PROJECTILE:
-            *w = scale * PROJECTILE_W;
-            *h = scale * PROJECTILE_H;
+            *w = scalex * PROJECTILE_W;
+            *h = scaley * PROJECTILE_H;
             break;
     }
 }
@@ -47,7 +50,7 @@ int isMobOnMob(Mob m1, Mob m2){
     setHitbox(m1.type, &m1w, &m1h);
     setHitbox(m2.type, &m2w, &m2h);
     
-    int deltaX = m1.px - m2.px;
-    int deltaY = m1.py - m2.py;
-    return !deltaX && !deltaY ;
+    float deltaPosX = fabs(m1.px - m2.px);
+    float deltaPosY = fabs(m1.py - m2.py);
+    return deltaPosX < (m1w + m2w) && deltaPosY < (m1h + m2h) ;
 }

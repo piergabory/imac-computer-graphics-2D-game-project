@@ -16,16 +16,6 @@ MobList getMobList(char mob) {
 
 int initGame() {
     gm = allocGame();
-    
-    // set mob lists
-    gm->enemies = NULL;
-    gm->bonuses = NULL;
-    gm->projectiles = NULL;
-    
-    
-
-
-
 
     // set mob lists
     gm->enemies = NULL;
@@ -44,6 +34,7 @@ int initGame() {
     gm->player->vx = 0;
     gm->player->vy = 0;
     
+    gm->player->health = 20;
     gm->player->type = PLAYER;
     gm->player->next = NULL;
     
@@ -52,28 +43,65 @@ int initGame() {
 }
 
 void updateGame() {
+    /* TODO stop at the right time*/
     if (gm->level->progress < 1 - gm->level->height/gm->level->width) gm->level->progress += PROGRESS_RATE;
     
     updatePlayer(gm->player);
     
     if(isMobOnTerrain(*(gm->player),*(gm->level))){
         printf("ouch!\n");
+        /* TODO: Player hit a wall */
+        playerHealth(WALL_DAMAGE);
     }
     
     MobList *curr = &(gm->enemies);
     while (*curr != NULL) {
-        updateEnnemy(*curr);
-        curr = &((*curr)->next);
+        if (isMobOnMob(**curr, *(gm->player))) {
+            freeMob(curr);
+            printf("aie!\n");
+            /* TODO: Player hit an ennemy */
+            playerHealth(ENEMY_DAMAGE);
+        } else {
+            updateEnnemy(*curr);
+            curr = &((*curr)->next);
+        }
     }
     
+    curr = &(gm->bonuses);
+    while (*curr != NULL) {
+        if (isMobOnMob(**curr, *(gm->player))) {
+            freeMob(curr);
+            printf("yay!\n");
+            playerHealth(BONUS_HEALTH);
+            /* TODO: Player hit a bonus */
+        } else {
+            curr = &((*curr)->next);
+        }
+    }
+    
+    MobList *target;
     curr = &(gm->projectiles);
     while (*curr != NULL) {
-        if(isMobOnTerrain(**curr, *(gm->level)) || (*curr)->px > 1) {
+        if (isMobOnTerrain(**curr, *(gm->level)) || (*curr)->px > 1) {
             freeMob(curr);
-        }
-        else {
+            /* TODO: Projectile hit a wall */
+        } else {
             updateProjectile(*curr);
-            curr = &((*curr)->next);
+            
+            target = &(gm->enemies);
+            while (*target != NULL && *curr != NULL) {
+                if (isMobOnMob(**target, **curr)) {
+                    freeMob(target);
+                    freeMob(curr);
+                    printf("pow!\n");
+                    /* TODO: Projectile hit an ennemy */
+                    break;
+                } else {
+                    target = &((*target)->next);
+                }
+            }
+            
+            if (*curr != NULL) curr = &((*curr)->next);
         }
     }
 }
@@ -90,5 +118,10 @@ void playerShoot() {
     gm->projectiles->vx = 0.001;
 }
 
-
+void playerHealth(int value) {
+    if ((gm->player->health + value) < 0)
+        printf("game over\n");
+    else
+        gm->player->health += value;
+}
 

@@ -23,6 +23,7 @@ typedef struct level {
 typedef struct mobile {
     float vy, vx;
     float py, px;
+    int health;
     unsigned char type;
     struct mobile *next;
 } Mob, *MobList;

@@ -11,6 +11,10 @@
 
 #define MAX_SPEED 1
 
+#define ENEMY_DAMAGE -3
+#define WALL_DAMAGE -1
+#define BONUS_HEALTH 5
+
 static Game *gm = NULL;
 
 Level getLevel();
@@ -24,5 +28,7 @@ void updateGame();
 void changePlayerSpeedBy(float vx, float vy);
 
 void playerShoot();
+
+void playerHealth(int value);
 
 #endif /* flapimac_h */
