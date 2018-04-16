@@ -19,4 +19,9 @@
 
 int loadWorld(char *path, Game *gm);
 
+#define TEMP_FILE "tmp.ppm"
+#define PPM_COMMENT '#'
+#define PPM_TYPE_1 "P6"
+#define PPM_TYPE_2 "P3"
+
 #endif /* loadgame_h */

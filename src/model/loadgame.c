@@ -13,14 +13,26 @@
  */
 
 int loadWorld(char *path, Game *gm) {
-    // TODO : Discard comments
-    
     // attempts to open file
-    FILE *in = NULL;
-    if ((in = fopen(path,"r")) == NULL) {
+    FILE *in = NULL, *tmpfile = NULL;
+    if ((in = fopen(path,"r")) == NULL || (tmpfile = fopen(TEMP_FILE,"w")) == NULL) {
         printf(ERR_FILE_OPEN, path);
         return 1;
     };
+    
+    // remove comment lines
+    char keep = 1, discard = 1;
+    while ((keep = fgetc(in)) != EOF && discard != EOF) {
+        if (keep == PPM_COMMENT)                                // when met with a comment char '#',
+            do discard = fgetc(in);                     // we skip until we arrive
+            while (discard != '\n' && discard != EOF);  // at the end of the line
+        else
+            fputc(keep, tmpfile); // otherwise we copy the file char by char
+    }
+    fclose(in); fclose(tmpfile);
+    in = fopen(TEMP_FILE, "r");
+    system("rm "TEMP_FILE); // destroy temp file
+    
     
     // check for file type
     char buff[32];
@@ -29,7 +41,7 @@ int loadWorld(char *path, Game *gm) {
         return 3;
     };
     
-    if(strcmp("P6", buff) && strcmp("P3", buff)) {
+    if(strcmp(PPM_TYPE_1, buff) && strcmp(PPM_TYPE_2, buff)) {
         printf(ERR_FILE_FORMAT, path);
         return 2;
     }
