@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Werror -W -g
+CFLAGS = -Wall -Werror -W -g -O 
 LDFLAGS =
 
 APP_BIN = flapimac

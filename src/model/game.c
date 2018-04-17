@@ -37,29 +37,36 @@ int initGame() {
     gm->player->health = 20;
     gm->player->type = PLAYER;
     gm->player->next = NULL;
-    
-    
     return 1;
 }
 
 void updateGame() {
-    /* TODO stop at the right time*/
-    if (gm->level->progress < 1 - gm->level->height/gm->level->width) gm->level->progress += PROGRESS_RATE;
-    
+    // stop scrolling at the end of the map
+    float max_progress = 1 - (getViewportWidth()/(float)getViewportHeight()) * (gm->level->height/(float)gm->level->width);
+    if (gm->level->progress < max_progress)
+        gm->level->progress += PROGRESS_RATE;
+
     updatePlayer(gm->player);
     
-    if(isMobOnTerrain(*(gm->player),*(gm->level))){
+    // player hit terrain
+    int terrainType = 0;
+    if((terrainType = isMobOnTerrain(*(gm->player), *(gm->level)))){
         printf("ouch!\n");
-        /* TODO: Player hit a wall */
-        playerHealth(WALL_DAMAGE);
+        gm->player->vx *= -.5;
+        gm->player->vy *= -.5;
+        if(terrainType == 18)
+            /* TODO : Victory */
+            printf("Win");
+        else
+            playerHealth(WALL_DAMAGE);
     }
     
+    // player hit mob
     MobList *curr = &(gm->enemies);
     while (*curr != NULL) {
         if (isMobOnMob(**curr, *(gm->player))) {
             freeMob(curr);
             printf("aie!\n");
-            /* TODO: Player hit an ennemy */
             playerHealth(ENEMY_DAMAGE);
         } else {
             updateEnnemy(*curr);
@@ -67,34 +74,36 @@ void updateGame() {
         }
     }
     
+    // player hit bonus
     curr = &(gm->bonuses);
     while (*curr != NULL) {
         if (isMobOnMob(**curr, *(gm->player))) {
             freeMob(curr);
             printf("yay!\n");
             playerHealth(BONUS_HEALTH);
-            /* TODO: Player hit a bonus */
         } else {
             curr = &((*curr)->next);
         }
     }
     
+    // projectiles
     MobList *target;
     curr = &(gm->projectiles);
     while (*curr != NULL) {
+        // projectile hit wall
         if (isMobOnTerrain(**curr, *(gm->level)) || (*curr)->px > 1) {
             freeMob(curr);
-            /* TODO: Projectile hit a wall */
+            
         } else {
             updateProjectile(*curr);
             
+            // projectile hit enemy
             target = &(gm->enemies);
             while (*target != NULL && *curr != NULL) {
                 if (isMobOnMob(**target, **curr)) {
                     freeMob(target);
                     freeMob(curr);
                     printf("pow!\n");
-                    /* TODO: Projectile hit an ennemy */
                     break;
                 } else {
                     target = &((*target)->next);
@@ -119,9 +128,13 @@ void playerShoot() {
 }
 
 void playerHealth(int value) {
-    if ((gm->player->health + value) < 0)
+    if ((gm->player->health + value) < 0) {
         printf("game over\n");
-    else
+        /*
+         TODO : Game over.
+         */
+    } else {
         gm->player->health += value;
+    }
 }
 

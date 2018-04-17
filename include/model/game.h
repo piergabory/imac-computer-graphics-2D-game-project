@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "support/messages.h"
+#include "support/window.h"
 
 #include "gamedata.h"
 #include "loadgame.h"

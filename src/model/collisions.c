@@ -29,20 +29,19 @@ static void setHitbox(char mobType, float *w, float *h) {
 }
 
 int isMobOnTerrain(Mob m, Level l){
-    int col = (int)(m.px * l.width) % l.width ;
-    int row = (int)(m.py * l.height) % (l.height-1);
+    float mw, mh;
+    setHitbox(m.type, &mw, &mh);
     
-    if (l.map[row][col] != 0){
-        l.map[row][col] = 0;
-        return 1;
-    }
+    int minCol = (int)((m.px) * l.width) % l.width;
+    int minRow = (int)((m.py - mh) * l.height) % (l.height-1);
     
-    else if (l.map[row+1][col] != 0) {
-        l.map[row+1][col] = 0;
-        return 1;
-    }
+    int maxCol = (int)((m.px) * l.width) % l.width;
+    int maxRow = (int)((m.py + mh) * l.height) % (l.height-1);
     
-    return 0;
+    if (l.map[minRow][minCol] || l.map[maxRow][maxCol])
+        return l.map[minRow][minCol];
+    else
+        return 0;
 }
 
 int isMobOnMob(Mob m1, Mob m2){

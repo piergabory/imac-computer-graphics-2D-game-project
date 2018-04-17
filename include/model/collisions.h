@@ -16,10 +16,10 @@ int isMobOnMob(Mob m1, Mob m2);
 #define PLAYER_W 1
 #define PLAYER_H 1
 
-#define BONUS_W 1
-#define BONUS_H 1
+#define BONUS_W 0.6
+#define BONUS_H 0.6
 
-#define PROJECTILE_W 1
+#define PROJECTILE_W 0.4
 #define PROJECTILE_H 0.2
 
 #endif /* collisions_h */
