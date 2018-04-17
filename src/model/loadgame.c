@@ -73,7 +73,7 @@ int loadWorld(char *path, Game *gm) {
             if (r == max && b == max && g == max) continue;
             
             // obstacle
-            gm->level->map[y][x] = (g == 0 && b == 0)? r : 0;
+            gm->level->map[y][x] = (g == 0 && b == 0) ? r/10 : 0;
             
             // enemy
             if (b == 0 && r == 0) {
