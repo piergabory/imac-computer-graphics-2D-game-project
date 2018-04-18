@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Werror -W -g -O 
+CFLAGS = -Wall -W -g -O 
 LDFLAGS =
 
 APP_BIN = flapimac
@@ -20,7 +20,7 @@ ifeq ($(UNAME),Darwin)
     LDFLAGS = -framework OpenGL -framework SDL2 -framework SDL2_image -framework Cocoa
 else
 	CFLAGS += -D Linux
-    LDFLAGS = -lSDL2 -LSDL2_image
+    LDFLAGS = -lSDL2 -lGLU -lGL -lm -lSDL2_image
 endif
 
 
