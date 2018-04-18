@@ -59,8 +59,7 @@ void updateViewport(int w, int h) {
         vhr = WINDOW_HEIGHT/(float)WINDOW_WIDTH;
     }
     
-    GLKMatrix4 orthoMat = GLKMatrix4MakeOrtho(0, vwr, vhr, 0, -1.0f, 1.0f);
-    glLoadMatrixf(orthoMat.m);
+    SET_ORTHO_MATRIX(0, vwr, vhr, 0);
 }
 
 unsigned int getViewportWidth() { return WINDOW_WIDTH; }

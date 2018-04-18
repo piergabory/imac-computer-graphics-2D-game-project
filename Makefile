@@ -20,6 +20,7 @@ ifeq ($(UNAME),Darwin)
     LDFLAGS = -framework OpenGL -framework SDL2 -framework SDL2_image -framework Cocoa
 else
 	CFLAGS += -D Linux
+    LDFLAGS = -lSDL2 -LSDL2_image
 endif
 
 
