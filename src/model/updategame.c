@@ -22,7 +22,14 @@ void updatePlayer(Mob *p) {
     }
 }
 
-void updateEnnemy(Mob *e, Mob *p) {
+void updateEnnemy(Mob *e, Mob p) {
+    if (e->px - p.px < 0.1){
+        e->vy += ((p.py - e->py) > 0)? 0.0001 : -0.0001;
+        e->vy *= .9;
+    } else {
+        e->vy = sinf((p.px - e->px)*100)/1000;
+    }
+    
     e->px += e->vx;
     e->py += e->vy;
 }

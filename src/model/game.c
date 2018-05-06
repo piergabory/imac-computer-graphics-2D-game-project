@@ -85,7 +85,7 @@ void updateGame() {
     for (curr = &(gm->enemies); *curr != NULL; curr = &((*curr)->next)) {
         if(isHidden(**curr)) continue;
         
-        updateEnnemy(*curr, gm->player);
+        updateEnnemy(*curr, *(gm->player));
         
         // ennemy shoot randomly if align with the player and is visible
         if ((rand() % 300) == 0 && fabs((*curr)->py - gm->player->py) < 0.1) {
