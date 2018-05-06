@@ -2,6 +2,8 @@
 #define flapimac_h
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "support/messages.h"
 #include "support/window.h"
@@ -14,6 +16,7 @@
 #define MAX_SPEED 1
 
 #define ENEMY_DAMAGE -3
+#define PROJECTILE_DAMAGE -1
 #define WALL_DAMAGE -1
 #define BONUS_HEALTH 5
 
@@ -27,10 +30,16 @@ int initGame();
 
 void updateGame();
 
-void changePlayerSpeedBy(float vx, float vy);
+void playerHit(MobList *ml, int damage);
 
 void playerShoot();
 
+void ennemyShoot(Mob e);
+
+void changePlayerSpeedBy(float vx, float vy);
+
 void playerHealth(int value);
+
+int isHidden(Mob m);
 
 #endif /* flapimac_h */

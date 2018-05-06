@@ -8,6 +8,7 @@
 
 int isMobOnTerrain(Mob m, Level l);
 int isMobOnMob(Mob m1, Mob m2);
+MobList *isMobOnMoblist(Mob m, MobList *ml);
 
 // mob sizes relative to a sprite size
 #define ENEMY_W 1

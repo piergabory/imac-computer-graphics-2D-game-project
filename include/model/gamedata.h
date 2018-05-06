@@ -6,6 +6,7 @@
 #define OBSTACLE 'o'
 #define PLAYER 'p'
 #define PROJECTILE 'j'
+#define ENNEMY_PROJECTILE 't'
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -34,6 +35,7 @@ typedef struct game{
     MobList enemies;
     MobList bonuses;
     MobList projectiles;
+    MobList ennemyProjectiles;
     Mob *player;
 } Game;
 
