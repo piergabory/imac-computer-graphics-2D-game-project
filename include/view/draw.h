@@ -25,4 +25,8 @@ void initView();
  */
 void draw();
 
+void setScreen(int screenId);
+
+static int screen = SPRITE_EMPTY;
+
 #endif /* draw_h */

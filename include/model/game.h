@@ -28,6 +28,8 @@ MobList getMobList(char mob);
 
 int initGame();
 
+void resetGame();
+
 void updateGame();
 
 void playerHit(MobList *ml, int damage);

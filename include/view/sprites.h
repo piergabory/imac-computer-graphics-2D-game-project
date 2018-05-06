@@ -16,7 +16,11 @@
 #define SPRITE_BONUS 21
 #define SPRITE_ENEMY 22
 
-#define SPRITES_COUNT 24
+#define SPRITE_DEFEAT 24
+#define SPRITE_VICTORY 25
+#define SPRITE_EMPTY 26
+
+#define SPRITES_COUNT 27
 
 /* INIT SPRITES
  * ============

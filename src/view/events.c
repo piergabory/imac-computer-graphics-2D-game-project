@@ -15,6 +15,8 @@ int eventLoop() {
             switch (e.key.keysym.sym) {
                 case SDLK_SPACE:
                     playerShoot();
+                    if (getLevel().status != 0)
+                        resetGame();
                     break;
                     
                 case SDLK_z: case SDLK_UP:

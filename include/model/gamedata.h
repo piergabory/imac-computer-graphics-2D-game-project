@@ -16,6 +16,7 @@
 // structure collecting world obstacles and game progress
 typedef struct level {
     float progress;
+    int status;
     unsigned int width, height;
     unsigned int **map;
 } Level;

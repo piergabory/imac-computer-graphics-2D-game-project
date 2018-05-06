@@ -31,6 +31,8 @@ int initGame() {
         return 0;
     }
     
+    gm->level->status = 0;
+    
     // set player
     gm->player->px = 0.01;
     gm->player->py = 0.5;
@@ -41,6 +43,10 @@ int initGame() {
     gm->player->type = PLAYER;
     gm->player->next = NULL;
     return 1;
+}
+
+void resetGame() {
+    initGame();
 }
 
 void updateGame() {
@@ -63,8 +69,7 @@ void updateGame() {
         gm->player->vx *= -.5;
         gm->player->vy *= -.5;
         if(terrainType == 18)
-        /* TODO : Victory */
-            printf("Win");
+            gm->level->status = 1;
         else
             playerHealth(WALL_DAMAGE);
     }
@@ -147,10 +152,7 @@ void changePlayerSpeedBy(float vx, float vy) {
 
 void playerHealth(int value) {
     if ((gm->player->health + value) < 0) {
-        printf("game over\n");
-        /*
-         TODO : Game over.
-         */
+        gm->level->status = -1;
     } else {
         gm->player->health += value;
     }

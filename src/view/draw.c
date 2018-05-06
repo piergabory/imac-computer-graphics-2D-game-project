@@ -40,6 +40,24 @@ void draw() {
     
     glPopMatrix();
     
+    int screen = SPRITE_EMPTY;
+    switch (l.status) {
+        case -1: screen = SPRITE_DEFEAT; break;
+        case 1: screen = SPRITE_VICTORY; break;
+    }
+    
+    glPushMatrix();
+    glTranslatef(0.5*(getViewportWidth()/(float)getViewportHeight()), 0.5, 0);
+    glScalef(.9,.9,1);
+    if (l.status < 0) {
+        glClear(GL_COLOR_BUFFER_BIT);
+        drawSprite(SPRITE_DEFEAT);
+    } else if (l.status > 0) {
+        glClear(GL_COLOR_BUFFER_BIT);
+        drawSprite(SPRITE_VICTORY);
+    }
+    glPopMatrix();
+    
     drawHealthBar(p.health);
 }
 
@@ -63,4 +81,13 @@ void initView() {
     // enable transparency
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void setScreen(int screenId) {
+    switch (screenId) {
+        case 24:
+        case 25:
+        case 26:
+        screen = screenId;
+    }
 }
