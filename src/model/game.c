@@ -9,18 +9,21 @@ MobList getMobList(char mob) {
         case 'e': return gm->enemies;
         case 'b': return gm->bonuses;
         case 'j': return gm->projectiles;
+        case 't': return gm->ennemyProjectiles;
         case 'p': return gm->player;
         default: return NULL;
     }
 }
 
 int initGame() {
+    srand(time(NULL));
     gm = allocGame();
 
     // set mob lists
     gm->enemies = NULL;
     gm->bonuses = NULL;
     gm->projectiles = NULL;
+    gm->ennemyProjectiles = NULL;
     
     // set level, ennemies and bonuses
     if(loadWorld("map.ppm", gm) != 0){
@@ -71,6 +74,8 @@ void updateGame() {
         } else {
             updateEnnemy(*curr);
             curr = &((*curr)->next);
+        if ((rand() % 300) == 0 && fabs((*curr)->py - gm->player->py) < 0.1) {
+            ennemyShoot(**curr);
         }
     }
     
@@ -127,6 +132,12 @@ void playerShoot() {
     gm->projectiles->vx = 0.001;
 }
 
+void ennemyShoot(Mob e) {
+    Mob *tmp = gm->ennemyProjectiles;
+    gm->ennemyProjectiles = allocMob(ENNEMY_PROJECTILE, e.px, e.py);
+    gm->ennemyProjectiles->next = tmp;
+    gm->ennemyProjectiles->vx = -0.001;
+}
 void playerHealth(int value) {
     if ((gm->player->health + value) < 0) {
         printf("game over\n");

@@ -36,6 +36,7 @@ void draw() {
     drawMobList(BONUS, l, SPRITE_BONUS);
     drawMobList(ENEMY, l, SPRITE_ENEMY);
     drawMobList(PROJECTILE, l, SPRITE_PROJECTILE);
+    drawMobList(ENNEMY_PROJECTILE, l, SPRITE_ENNEMY_PROJECTILE);
     
     glPopMatrix();
     

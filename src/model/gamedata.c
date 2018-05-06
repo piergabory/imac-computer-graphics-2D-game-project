@@ -47,7 +47,7 @@ Game* allocGame() {
 
 void freeMob(MobList *mob) {
     Mob *tmp = *mob;
-    *mob = ((**mob).next);
+    *mob = (**mob).next;
     free(tmp);
     tmp = NULL;
 }
