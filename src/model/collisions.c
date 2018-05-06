@@ -28,7 +28,7 @@ static void setHitbox(char mobType, float *w, float *h) {
     }
 }
 
-int isMobOnTerrain(Mob m, Level l){
+int isMobOnTerrain(Mob m, Level l) {
     float mw, mh;
     setHitbox(m.type, &mw, &mh);
     
@@ -44,7 +44,7 @@ int isMobOnTerrain(Mob m, Level l){
         return 0;
 }
 
-int isMobOnMob(Mob m1, Mob m2){
+int isMobOnMob(Mob m1, Mob m2) {
     float m1w, m1h, m2w, m2h;
     setHitbox(m1.type, &m1w, &m1h);
     setHitbox(m2.type, &m2w, &m2h);
@@ -52,4 +52,16 @@ int isMobOnMob(Mob m1, Mob m2){
     float deltaPosX = fabs(m1.px - m2.px);
     float deltaPosY = fabs(m1.py - m2.py);
     return deltaPosX < (m1w + m2w) && deltaPosY < (m1h + m2h) ;
+}
+
+MobList *isMobOnMoblist(Mob m, MobList *ml) {
+    if(ml != NULL) {
+        while (*ml != NULL) {
+            if (isMobOnMob(**ml, m))
+                break;
+            else
+                ml = &((*ml)->next);
+        }
+    }
+    return ml;
 }

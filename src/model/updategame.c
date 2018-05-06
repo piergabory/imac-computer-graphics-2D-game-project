@@ -22,8 +22,9 @@ void updatePlayer(Mob *p) {
     }
 }
 
-void updateEnnemy(Mob *e) {
-    e->px += 0;
+void updateEnnemy(Mob *e, Mob *p) {
+    e->px += e->vx;
+    e->py += e->vy;
 }
 
 void updateProjectile(Mob *p) {

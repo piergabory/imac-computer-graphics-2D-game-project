@@ -44,85 +44,86 @@ int initGame() {
 }
 
 void updateGame() {
+    float level_screen_size = (getViewportWidth()/(float)getViewportHeight()) * gm->level->height;
+    float zone_size = level_screen_size/(float)gm->level->width;
+    
     // stop scrolling at the end of the map
-    float max_progress = 1 - (getViewportWidth()/(float)getViewportHeight()) * (gm->level->height/(float)gm->level->width);
-    if (gm->level->progress < max_progress)
+    if (gm->level->progress < 1 - zone_size)
         gm->level->progress += PROGRESS_RATE;
 
+    // update player
     updatePlayer(gm->player);
     
-    // player hit terrain
-    int terrainType = 0;
-    if((terrainType = isMobOnTerrain(*(gm->player), *(gm->level)))){
+    //// PLAYER COLLISIONS
+    
+    // Terrain
+    int terrainType = isMobOnTerrain(*(gm->player), *(gm->level));
+    if(terrainType != 0){
         printf("ouch!\n");
         gm->player->vx *= -.5;
         gm->player->vy *= -.5;
         if(terrainType == 18)
-            /* TODO : Victory */
+        /* TODO : Victory */
             printf("Win");
         else
             playerHealth(WALL_DAMAGE);
     }
     
-    // player hit mob
-    MobList *curr = &(gm->enemies);
-    while (*curr != NULL) {
-        if (isMobOnMob(**curr, *(gm->player))) {
-            freeMob(curr);
-            printf("aie!\n");
-            playerHealth(ENEMY_DAMAGE);
-        } else {
-            updateEnnemy(*curr);
-            curr = &((*curr)->next);
+    // Bonus, Enemy and Enemy Projectile
+    playerHit(&(gm->bonuses), BONUS_HEALTH);
+    playerHit(&(gm->enemies), ENEMY_DAMAGE);
+    playerHit(&(gm->ennemyProjectiles), PROJECTILE_DAMAGE);
+
+    
+    //// END PLAYER COLLISIONS
+    
+    //// UPDATE MOBS
+    MobList *curr = NULL;
+    MobList *target = NULL;
+    
+    
+    for (curr = &(gm->enemies); *curr != NULL; curr = &((*curr)->next)) {
+        if(isHidden(**curr)) continue;
+        
+        updateEnnemy(*curr, gm->player);
+        
+        // ennemy shoot randomly if align with the player and is visible
         if ((rand() % 300) == 0 && fabs((*curr)->py - gm->player->py) < 0.1) {
             ennemyShoot(**curr);
         }
     }
     
-    // player hit bonus
-    curr = &(gm->bonuses);
-    while (*curr != NULL) {
-        if (isMobOnMob(**curr, *(gm->player))) {
-            freeMob(curr);
-            printf("yay!\n");
-            playerHealth(BONUS_HEALTH);
-        } else {
-            curr = &((*curr)->next);
-        }
+    for (curr = &(gm->ennemyProjectiles); *curr != NULL; curr = &((*curr)->next)) {
+        if(isHidden(**curr)) continue;
+        updateProjectile(*curr);
     }
     
     // projectiles
-    MobList *target;
-    curr = &(gm->projectiles);
-    while (*curr != NULL) {
+    for (curr = &(gm->projectiles); *curr != NULL; curr = &((*curr)->next)) {
+        // projectile is flying
+        updateProjectile(*curr);
+        
         // projectile hit wall
-        if (isMobOnTerrain(**curr, *(gm->level)) || (*curr)->px > 1) {
+        if (isMobOnTerrain(**curr, *(gm->level)) || isHidden(**curr)) {
             freeMob(curr);
+            break;
+        }
             
-        } else {
-            updateProjectile(*curr);
-            
-            // projectile hit enemy
-            target = &(gm->enemies);
-            while (*target != NULL && *curr != NULL) {
-                if (isMobOnMob(**target, **curr)) {
-                    freeMob(target);
-                    freeMob(curr);
-                    printf("pow!\n");
-                    break;
-                } else {
-                    target = &((*target)->next);
-                }
-            }
-            
-            if (*curr != NULL) curr = &((*curr)->next);
+        // projectile hit enemy
+        if (*(target = isMobOnMoblist(**curr, &(gm->enemies))) != NULL) {
+            freeMob(target);
+            freeMob(curr);
+            continue;
         }
     }
 }
 
-void changePlayerSpeedBy(float vx, float vy) {
-    if (fabs(gm->player->vx + vx) < MAX_SPEED) gm->player->vx += vx;
-    if (fabs(gm->player->vy + vy) < MAX_SPEED) gm->player->vy += vy;
+void playerHit(MobList *ml, int damage) {
+    MobList *hit = isMobOnMoblist(*(gm->player), ml);
+    if(*hit != NULL) {
+        freeMob(hit);
+        playerHealth(damage);
+    }
 }
 
 void playerShoot() {
@@ -138,6 +139,12 @@ void ennemyShoot(Mob e) {
     gm->ennemyProjectiles->next = tmp;
     gm->ennemyProjectiles->vx = -0.001;
 }
+
+void changePlayerSpeedBy(float vx, float vy) {
+    if (fabs(gm->player->vx + vx) < MAX_SPEED) gm->player->vx += vx;
+    if (fabs(gm->player->vy + vy) < MAX_SPEED) gm->player->vy += vy;
+}
+
 void playerHealth(int value) {
     if ((gm->player->health + value) < 0) {
         printf("game over\n");
@@ -147,5 +154,18 @@ void playerHealth(int value) {
     } else {
         gm->player->health += value;
     }
+}
+
+int isHidden(Mob m) {
+    float level_screen_size = (getViewportWidth()/(float)getViewportHeight()) * gm->level->height;
+    float zone_size = level_screen_size/(float)gm->level->width;
+    
+    // mob is off the left bound of the viewport
+    int isAfter = m.px < gm->level->progress;
+    
+    // mob is off the right bound of the viewports
+    int isBefore = m.px > gm->level->progress + zone_size;
+    
+    return isBefore || isAfter;
 }
 
