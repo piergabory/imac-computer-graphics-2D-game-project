@@ -113,7 +113,7 @@ void updateGame() {
         if (*(target = isMobOnMoblist(**curr, &(gm->enemies))) != NULL) {
             freeMob(target);
             freeMob(curr);
-            continue;
+            break;
         }
     }
 }
