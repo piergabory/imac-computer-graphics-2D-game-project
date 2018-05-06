@@ -11,10 +11,6 @@
 int eventLoop() {
     SDL_Event e;
     while(SDL_PollEvent(&e)) switch(e.type) {
-        case SDL_QUIT:
-                return 0;
-            break;
-            
         case SDL_KEYDOWN :
             switch (e.key.keysym.sym) {
                 case SDLK_SPACE:
@@ -38,10 +34,23 @@ int eventLoop() {
                     break;
             }
             break;
-            
+
+// Todo: (Complicated)
+//        case SDL_CONTROLLERAXISMOTION:
+//            printf("controlleraxis");
+//            break;
+//
+//        case SDL_CONTROLLERBUTTONDOWN:
+//            printf("controllerbtn");
+//            break;
+//
         case SDL_WINDOWEVENT:
             if(e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
                 updateViewport(e.window.data1,e.window.data2);
+            break;
+            
+        case SDL_QUIT:
+            return 0;
             break;
             
         default: break;
