@@ -1,8 +1,8 @@
 #include "model/loadgame.h"
 
 /**
- * LOAD WORLD(LEVEL) DATA
- * ===============
+ * LOAD WORLD (LEVEL) DATA
+ * -----------------------
  * @param String path to the world's data file (.PPM format)
  * @param Game *gm reference to the game structure to initialize
  *

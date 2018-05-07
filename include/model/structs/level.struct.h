@@ -1,6 +1,11 @@
 #ifndef level_struct_h
 #define level_struct_h
 
+// statuses
+#define STATUS_PLAYING 0
+#define STATUS_LEVEL_COMPLETE 1
+#define STATUS_GAME_OVER -1
+
 // level structure collecting world obstacles and game progress
 typedef struct level {
     /**
