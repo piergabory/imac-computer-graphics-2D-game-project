@@ -9,7 +9,8 @@
 #include "gui.h"
 
 
-/* INIT VIEW
+/**
+ * INIT VIEW
  * ----------
  * Initialise view
  *
@@ -19,13 +20,12 @@
  */
 void initView();
 
-/* DRAW LOOP
+/**
+ * DRAW LOOP
  * ---------
  * OpenGL code executed between each clearBuffer and swapBuffer.
  */
 void draw();
-
-void setScreen(int screenId);
 
 static int screen = SPRITE_EMPTY;
 

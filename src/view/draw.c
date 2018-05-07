@@ -11,7 +11,8 @@ static void drawMobList(char mob, Level level, int sprite) {
     }
 }
 
-/* DRAW LOOP
+/**
+ * DRAW LOOP
  * ---------
  * OpenGL code executed between each clearBuffer and swapBuffer.
  */
@@ -29,7 +30,7 @@ void draw() {
     // paint player
     glPushMatrix();
     glTranslatef(p.px * l.width, p.py * l.height,0);
-    drawSprite(SPRITE_PLAYER);
+    drawSprite(SPRITE_PLAYER + ((int)(l.progress*200)%2));
     glPopMatrix();
     
     // paint mobs (bonus, ennemy, projectile)
@@ -47,8 +48,10 @@ void draw() {
     }
     
     glPushMatrix();
+    
     glTranslatef(0.5*(getViewportWidth()/(float)getViewportHeight()), 0.5, 0);
     glScalef(.9,.9,1);
+    
     if (l.status < 0) {
         glClear(GL_COLOR_BUFFER_BIT);
         drawSprite(SPRITE_DEFEAT);
@@ -56,21 +59,17 @@ void draw() {
         glClear(GL_COLOR_BUFFER_BIT);
         drawSprite(SPRITE_VICTORY);
     }
+    
     glPopMatrix();
     
     drawHealthBar(p.health);
 }
 
 
-
-
-/* INIT VIEW
+/**
+ * INIT VIEW
  * ----------
  * Initialise view
- *
- * @param: sdl window (see window.h)
- *
- * the loop method is called until it returns false (0)
  */
 void initView() {
     initSprites();
@@ -81,13 +80,4 @@ void initView() {
     // enable transparency
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-}
-
-void setScreen(int screenId) {
-    switch (screenId) {
-        case 24:
-        case 25:
-        case 26:
-        screen = screenId;
-    }
 }
