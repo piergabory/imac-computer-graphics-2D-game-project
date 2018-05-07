@@ -1,8 +1,15 @@
+# Bash options
+
 CC = gcc
 CFLAGS = -Wall -W -g 
 LDFLAGS =
 
+# Binary name
+
 APP_BIN = flapimac
+
+
+# Paths
 
 SRC_PATH = src
 OBJ_PATH = obj
@@ -10,9 +17,14 @@ INC_PATH = -I include/
 BIN_PATH = bin
 LIB_PATH = lib
 
+
+# Files
+
 SRC_FILES = $(shell find $(SRC_PATH) -type f -name '*.c')
 OBJ_FILES = $(patsubst $(SRC_PATH)/%.c,$(OBJ_PATH)/%.o, $(SRC_FILES))
 
+
+# OS detection
 
 UNAME := $(shell uname -s)
 ifeq ($(UNAME),Darwin)
@@ -24,6 +36,8 @@ else
 endif
 
 
+# Methods
+
 all: $(APP_BIN)
 
 $(APP_BIN): $(OBJ_FILES)
@@ -33,6 +47,9 @@ $(APP_BIN): $(OBJ_FILES)
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 	@mkdir -p "$(@D)"
 	$(CC) -c $< -o $@ $(CFLAGS) $(INC_PATH)
+
+run:
+	$(BIN_PATH)/$(APP_BIN)
 
 clean:
 	rm $(OBJ_FILES) $(BIN_PATH)/$(APP_BIN)

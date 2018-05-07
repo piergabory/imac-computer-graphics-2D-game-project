@@ -1,9 +1,12 @@
 #include "model/loadgame.h"
 
-/* LOAD WORLD DATA
+/**
+ * LOAD WORLD(LEVEL) DATA
  * ===============
- * @params: world-data file (.ppm) and references to an empty world, and moblists
- * @return: 0 if successful, other value if failed
+ * @param String path to the world's data file (.PPM format)
+ * @param Game *gm reference to the game structure to initialize
+ *
+ * @return 0 if successful, other value if failed
  *
  * Load a .ppm (portable pixel map) image representing different element of the game world:
  * - red pixels represent obstacles
@@ -13,12 +16,14 @@
  */
 
 int loadWorld(char *path, Game *gm) {
+    
     // attempts to open file
     FILE *in = NULL, *tmpfile = NULL;
     if ((in = fopen(path,"r")) == NULL || (tmpfile = fopen(TEMP_FILE,"w")) == NULL) {
         printf(ERR_FILE_OPEN, path);
-        return 1;
+        return 1;  // error failed to open
     };
+    
     
     // remove comment lines
     char keep = 1, discard = 1;
@@ -34,30 +39,33 @@ int loadWorld(char *path, Game *gm) {
     system("rm "TEMP_FILE); // destroy temp file
     
     
-    // check for file type
+    // check for file type (magic ppm word)
     char buff[32];
     if(fscanf(in,"%s",buff) == EOF) {
         printf(ERR_FILE_END, path);
-        return 3;
+        return 3; // error unexpected end of file
     };
     
     if(strcmp(PPM_TYPE_1, buff) && strcmp(PPM_TYPE_2, buff)) {
         printf(ERR_FILE_FORMAT, path);
-        return 2;
+        return 2; // error invalid file format
     }
     
     
-    // read metadata (image width/height, max pixel value)
+    // read metadata (image width/height and max pixel value)
     unsigned int max = 1, width, height;
     if(fscanf(in, "%d %d %d", &width, &height, &max) == EOF) {
         printf(ERR_FILE_END, path);
-        return 3;
+        return 3; // error unexpected end of file
     };
     
+    
+    // allocate level, sized with PPM image dimentions
     gm->level = allocLevel(width, height);
     
     
-    // read data
+    // read pixel data:
+    
     unsigned int r = 0, g = 0, b = 0;
     MobList tmp;
     
@@ -66,35 +74,38 @@ int loadWorld(char *path, Game *gm) {
             // get pixel
             if(fscanf(in, "%d %d %d", &r, &g, &b) == EOF) {
                 printf(ERR_FILE_END, path);
-                return 3;
+                return 3;  // error unexpected end of file
             };
             
-            // empty space
+            // CASE : empty space, skip to next pixel
             if (r == max && b == max && g == max) continue;
             
-            // obstacle
+            // CASE : obstacle, set terrain type
             gm->level->map[y][x] = (g == 0 && b == 0) ? r/10 : 0;
             
-            // enemy
+            // CASE : enemy, allocate enemy in enemies list
             if (b == 0 && r == 0) {
                 if ((tmp = allocMob(ENEMY, x/(float) width, y/(float) height))!= NULL){
                     tmp->next = gm->enemies;
                     gm->enemies = tmp;
                 }
-                else return 3;
+                else return 4; // error malloc
             }
             
-            // bonus
+            // CASE : bonus, allocate new bonus in moblist
             if (g== 0 && r == 0) {
                 if ((tmp = allocMob(BONUS, x/(float) width, y/(float) height))!= NULL) {
                     tmp->next = gm->bonuses;
                     gm->bonuses = tmp;
                 }
-                else return 3;
+                else return 4;  // error malloc
             }
         }
     
+    // close file
     fclose(in);
+    
+    // return success code
     return 0;
 }
 

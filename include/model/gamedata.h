@@ -1,52 +1,81 @@
 #ifndef gamedata_h
 #define gamedata_h
 
-#define ENEMY 'e'
-#define BONUS 'b'
-#define OBSTACLE 'o'
-#define PLAYER 'p'
-#define PROJECTILE 'j'
-#define ENNEMY_PROJECTILE 't'
-
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "structs/mob.struct.h"
+#include "structs/level.struct.h"
+#include "structs/game.struct.h"
+
 #include "support/messages.h"
 
-// structure collecting world obstacles and game progress
-typedef struct level {
-    float progress;
-    int status;
-    unsigned int width, height;
-    unsigned int **map;
-} Level;
+////// Memory allocation methods
 
-// definition of any moving entity (player, enemy, projectiles etc..)
-typedef struct mobile {
-    float vy, vx;
-    float py, px;
-    int health;
-    unsigned char type;
-    struct mobile *next;
-} Mob, *MobList;
-
-// main structure
-typedef struct game{
-    Level *level;
-    MobList enemies;
-    MobList bonuses;
-    MobList projectiles;
-    MobList ennemyProjectiles;
-    Mob *player;
-} Game;
-
-// Memory allocation
+/**
+ * Alloc Level
+ * -----------
+ * Allocate memory for a level structure
+ *
+ * @param unsigned int width, width in 'blocks' of the level
+ * @param unsigned int height, height in 'blocks' of the level
+ *
+ * @return Level* adress to the allocated memory
+ */
 Level* allocLevel(unsigned int width, unsigned int height);
+
+
+/**
+ * Alloc Mob
+ * -----------
+ * Allocate memory for a mobile structure
+ *
+ * @param unsigned char type, type of mob (defined in mob.struct)
+ *
+ * NOTE : Coordinates are a floating value between 0 and 1
+ *        relative to the level dimentions.
+ *        (ie: X=1 is on the end border of the world)
+ * @param float x, position on X axis in level
+ * @param float y, position on Y axis in level
+ *
+ * @return Level* adress to the allocated memory
+ */
 Mob* allocMob(unsigned char type, float x, float y);
+
+
+/**
+ * Alloc Game
+ * -----------
+ * Allocate memory for a new game structure
+ *
+ * No params.
+ *
+ * @return Game* adress to the allocated memory
+ */
 Game* allocGame();
 
-// Memory de-allocation
+
+
+////// Memory de-allocation methods
+
+/**
+ * Mob Deallocation
+ * ----------------
+ * Free memory allocated for a removed mob.
+ * Extract the mob out of it's list and link back the chain together
+ *
+ * @param Moblist *mob pointer to the chain link referencing the mob to freed
+ */
 void freeMob(MobList *mob);
-void freeGame(Game gm);
+
+/**
+ * Games Deallocation
+ * ----------------
+ * Free memory of an active game
+ * Free's the map, all mob lists and other variables
+ *
+ * @param Game *gm reference to game to free.
+ */
+void freeGame(Game *gm);
 
 #endif /* gamedata_h */

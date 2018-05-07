@@ -46,6 +46,7 @@ int initGame() {
 }
 
 void resetGame() {
+    freeGame(gm);
     initGame();
 }
 
@@ -67,12 +68,18 @@ void updateGame() {
     if(terrainType != 0){
         printf("ouch!\n");
         gm->player->vx *= -.5;
+        if (gm->player->vx >= 0)
+            gm->player->vx -= 2*PROGRESS_RATE;
+        
         gm->player->vy *= -.5;
         if(terrainType == 18)
             gm->level->status = 1;
         else
             playerHealth(WALL_DAMAGE);
     }
+    
+    // player cant leave the screen.
+    if (gm->player->px < gm->level->progress) gm->player->px = gm->level->progress;
     
     // Bonus, Enemy and Enemy Projectile
     playerHit(&(gm->bonuses), BONUS_HEALTH);
