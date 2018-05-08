@@ -10,8 +10,9 @@
 
     #include <OpenGL/gl.h>
     #include <OpenGL/glu.h>
-    #include <GLKit/GLKMatrix4.h>
 
+    // Apple has deprecated gluOrtho2D for their OpenGL Kit framework
+    #include <GLKit/GLKMatrix4.h>
     #define SET_ORTHO_MATRIX(left, right, bottom, top)  { \
             GLKMatrix4 orthoMat = GLKMatrix4MakeOrtho(left, right, bottom, top, -1.0f, 1.0f); \
             glLoadMatrixf(orthoMat.m); \

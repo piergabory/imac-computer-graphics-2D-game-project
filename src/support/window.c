@@ -1,19 +1,24 @@
 #include "support/window.h"
 
-/*  INIT WINDOW
+/**
+ *  INIT WINDOW
  *  ---------------
- *  @params: window reference, window title (text in the titlebar)
  *  Actions:
  *  - initialise SDL
  *  - create new window
  *  - initialise OpenGL context
+ *
+ *  @param SDL_Window **win
+ *  @param String title, text in the titlebar
  */
 int initWindow(SDL_Window **win, char* title) {
+    // initialize SDL
     if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
         fprintf(stderr, ERR_SDL_INIT);
         return 0;
     }
     
+    // create window
     *win = NULL;
     *win = SDL_CreateWindow(
       title,                                            // titlebar text
@@ -22,30 +27,42 @@ int initWindow(SDL_Window **win, char* title) {
       SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL          // fullscreen or resizable mode
     );
     
+    // check for errors
     if(*win == NULL) {
         fprintf(stderr, ERR_WINDOW_INIT);
         return 0;
     }
     
+    // initialize window
     SDL_GL_CreateContext(*win);
     updateViewport(UNDEFINED_DIMENTION,UNDEFINED_DIMENTION);
+    
+    // success
     return 1;
 }
 
 
-/*  UPDATE VIEWPORT
+/**
+ *  UPDATE VIEWPORT
  *  ---------------
- *  @param: width and height, if negative or nul, current dimentions are preserved
- *  handles resizing of the window.
+ *  Handles resizing of the window.
+ *
  *  Updates the projection matrix to keep proportions consistent
  *  and scales the space to fit the size of the window.
+ *
+ *  @param int w, new width
+ *  @param int h, new height
+ *
+ *  Use UNDEFINED_DIMENTION to ignore viewport aspect ratio changes
  */
 void updateViewport(int w, int h) {
+    // if one of the params is UNDEFINED_DIMENTIONS, ignore them.
     if (w > 0 && h > 0) {
         WINDOW_WIDTH = w;
         WINDOW_HEIGHT = h;
     }
     
+    // upate
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -59,8 +76,21 @@ void updateViewport(int w, int h) {
         vhr = WINDOW_HEIGHT/(float)WINDOW_WIDTH;
     }
     
+    // reset view matrix
     SET_ORTHO_MATRIX(0, vwr, vhr, 0);
 }
 
+
+
+
+//// GETTERS
+
+/**
+ * @return unsigned int viewport's width in pixels
+ */
 unsigned int getViewportWidth() { return WINDOW_WIDTH; }
+
+/**
+ * @return unsigned int viewport's height in pixels
+ */
 unsigned int getViewportHeight() { return WINDOW_HEIGHT; }

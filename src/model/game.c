@@ -37,7 +37,6 @@ MobList getMobList(char mob) {
 
 //// GAME METHODS
 
-
 /**
  * Initialise Game
  * ---------------
@@ -145,9 +144,9 @@ void updateGame() {
     playerHit(&(gm->bonuses), BONUS_HEALTH);
     playerHit(&(gm->enemies), ENEMY_DAMAGE);
     playerHit(&(gm->ennemyProjectiles), PROJECTILE_DAMAGE);
-
     
     //// END PLAYER COLLISIONS
+
     
     //// UPDATE MOBS
     MobList *curr = NULL;

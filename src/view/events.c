@@ -1,6 +1,7 @@
 #include "view/events.h"
 
-/* EVENT LOOP
+/**
+ * EVENT LOOP
  * ----------
  * SDL event loop handler
  * Asks SDL for any events and handles them accordingly
@@ -10,52 +11,59 @@
  */
 int eventLoop() {
     SDL_Event e;
+    
     while(SDL_PollEvent(&e)) switch(e.type) {
+    
+        //// Keyboard Events:
         case SDL_KEYDOWN :
             switch (e.key.keysym.sym) {
-                case SDLK_SPACE:
+                // action keys
+                case SDLK_SPACE: // Spacebar
+                    // shoot
                     playerShoot();
-                    if (getLevel().status != 0)
-                        resetGame();
-                    break;
                     
-                case SDLK_z: case SDLK_UP:
-                    changePlayerSpeedBy(0, 0.005);
+                    // restart game if stopped
+                    if (getLevel().status != 0) resetGame();
                     break;
-                    
-                case SDLK_s: case SDLK_DOWN:
+                
+                // direction keys
+                case SDLK_z: case SDLK_UP: // Z key / up arrow
                     changePlayerSpeedBy(0, -0.005);
                     break;
                     
-                case SDLK_q: case SDLK_LEFT:
+                case SDLK_s: case SDLK_DOWN: // S key / down arrow
+                    changePlayerSpeedBy(0, 0.005);
+                    break;
+                    
+                case SDLK_q: case SDLK_LEFT: // Q key / left arrow
                     changePlayerSpeedBy(-0.0001, 0);
                     break;
                     
-                case SDLK_d: case SDLK_RIGHT:
+                case SDLK_d: case SDLK_RIGHT: // D key / right arrow
                     changePlayerSpeedBy(0.0001, 0);
                     break;
+                    
+                // escape key
+                case SDLK_ESCAPE:
+                    // terminate program if game has ended
+                    if (getLevel().status != 0) return 0;
             }
             break;
 
-// Todo: (Complicated)
-//        case SDL_CONTROLLERAXISMOTION:
-//            printf("controlleraxis");
-//            break;
-//
-//        case SDL_CONTROLLERBUTTONDOWN:
-//            printf("controllerbtn");
-//            break;
-//
+
+        //// Window and Quit
         case SDL_WINDOWEVENT:
             if(e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
                 updateViewport(e.window.data1,e.window.data2);
             break;
             
         case SDL_QUIT:
-            return 0;
+            return 0; // stop program
             break;
             
         default: break;
     }
+    
+    // continue
     return 1;
 }

@@ -1,7 +1,13 @@
 #include "view/draw.h"
 
+/**
+ * Draw Mob List
+ * -------------
+ * draws sprites for each mobs of a list design by it's type.
+ */
 static void drawMobList(char mob, Level level, int sprite) {
     MobList list = getMobList(mob);
+    
     while (list != NULL) {
         glPushMatrix();
         glTranslatef(list->px * level.width, list->py * level.height,0);
@@ -14,15 +20,22 @@ static void drawMobList(char mob, Level level, int sprite) {
 /**
  * DRAW LOOP
  * ---------
- * OpenGL code executed between each clearBuffer and swapBuffer.
+ * Code executed between clear and swap of the buffer
  */
 void draw() {
+    // Get copies of the current level and player
     Level l = getLevel();
     Mob p = getPlayer();
     
+    // save view matrix state
     glPushMatrix();
+    
+    // set scale relative to the world dimensions so the world height should fit the screen.
     glScalef(1.0/l.height, 1.0/l.height, 1.0);
+    
+    // move the viewport relative to the progress value
     glTranslatef(-(l.progress * l.width),0,0);
+    
     
     // paint terrain
     drawTerrain(l, getViewportWidth(), getViewportHeight());
@@ -39,39 +52,48 @@ void draw() {
     drawMobList(PROJECTILE, l, SPRITE_PROJECTILE);
     drawMobList(ENNEMY_PROJECTILE, l, SPRITE_ENNEMY_PROJECTILE);
     
+    // restore view matrix
     glPopMatrix();
     
-    int screen = SPRITE_EMPTY;
-    switch (l.status) {
-        case -1: screen = SPRITE_DEFEAT; break;
-        case 1: screen = SPRITE_VICTORY; break;
-    }
+    // health bar
+    drawHealthBar(p.health);
     
+    // save view matrix
     glPushMatrix();
     
+    // scale the screen overlay to fill the screen
     glTranslatef(0.5*(getViewportWidth()/(float)getViewportHeight()), 0.5, 0);
     glScalef(.9,.9,1);
+
+    // print screen
     
+    // if GAME OVER
     if (l.status < 0) {
         glClear(GL_COLOR_BUFFER_BIT);
         drawSprite(SPRITE_DEFEAT);
-    } else if (l.status > 0) {
+    }
+    
+    // IF LEVEL COMPLETE
+    else if (l.status > 0) {
         glClear(GL_COLOR_BUFFER_BIT);
         drawSprite(SPRITE_VICTORY);
     }
     
+    // restore view matrix
     glPopMatrix();
-    
-    drawHealthBar(p.health);
 }
 
 
 /**
  * INIT VIEW
  * ----------
- * Initialise view
+ * Initialise the view
+ *
+ * Set the clearing color and enable transparency
  */
 void initView() {
+    
+    // prepare textures
     initSprites();
     
     // set sky color

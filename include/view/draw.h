@@ -12,21 +12,17 @@
 /**
  * INIT VIEW
  * ----------
- * Initialise view
+ * Initialise the view
  *
- * @param: sdl window (see window.h)
- *
- * the loop method is called until it returns false (0)
+ * Set the clearing color and enable transparency
  */
 void initView();
 
 /**
  * DRAW LOOP
  * ---------
- * OpenGL code executed between each clearBuffer and swapBuffer.
+ * Code executed between clear and swap of the buffer
  */
 void draw();
-
-static int screen = SPRITE_EMPTY;
 
 #endif /* draw_h */
