@@ -5,13 +5,13 @@
  * -------------
  * draws sprites for each mobs of a list design by it's type.
  */
-static void drawMobList(char mob, Level level, int sprite) {
+static void drawMobList(char mob, Level level, int sprite, int alternatives) {
     MobList list = getMobList(mob);
     
     while (list != NULL) {
         glPushMatrix();
         glTranslatef(list->px * level.width, list->py * level.height,0);
-        drawSprite(sprite);
+        drawSprite(sprite + ((int)(level.progress * 200) % alternatives));
         list = list->next;
         glPopMatrix();
     }
@@ -40,7 +40,7 @@ void draw() {
     // paint terrain
     drawTerrain(l, getViewportWidth(), getViewportHeight());
     
-    glTranslatef(-1, -1, 0);
+    glTranslatef(0, -1, 0);
     
     // paint player
     glPushMatrix();
@@ -49,10 +49,10 @@ void draw() {
     glPopMatrix();
     
     // paint mobs (bonus, ennemy, projectile)
-    drawMobList(BONUS, l, SPRITE_BONUS);
-    drawMobList(ENEMY, l, SPRITE_ENEMY);
-    drawMobList(PROJECTILE, l, SPRITE_PROJECTILE);
-    drawMobList(ENEMY_PROJECTILE, l, SPRITE_ENEMY_PROJECTILE);
+    drawMobList(BONUS, l, SPRITE_BONUS, SPRITE_BONUS_ALT_COUNT);
+    drawMobList(ENEMY, l, SPRITE_ENEMY, SPRITE_ENEMY_ALT_COUNT);
+    drawMobList(PROJECTILE, l, SPRITE_PROJECTILE, SPRITE_PROJECTILE_ALT_COUNT);
+    drawMobList(ENEMY_PROJECTILE, l, SPRITE_ENEMY_PROJECTILE, SPRITE_ENEMY_PROJECTILE_ALT_COUNT);
     
     // restore view matrix
     glPopMatrix();

@@ -156,7 +156,7 @@ void freeGame(Game *gm) {
     
     // free level
     free(gm->level);
-    gm->level = NULL
+    gm->level = NULL;
     
     
     // MOB LISTS

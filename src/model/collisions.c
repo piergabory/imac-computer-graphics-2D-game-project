@@ -38,7 +38,7 @@ static void setHitbox(char mobType, float *w, float *h) {
             *h = scaley * PROJECTILE_H;
             break;
             
-        case ENNEMY_PROJECTILE:
+        case ENEMY_PROJECTILE:
             *w = scalex * ENEMY_PROJECTILE_W;
             *h = scaley * ENEMY_PROJECTILE_H;
             break;

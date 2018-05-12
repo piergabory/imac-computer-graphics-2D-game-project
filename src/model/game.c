@@ -111,8 +111,8 @@ void resetGame() {
  * Should be called in the SDL main loop
  */
 void updateGame() {
-    float level_screen_size = (getViewportWidth()/(float)getViewportHeight()) * gm->level->height;
-    float zone_size = level_screen_size/(float)gm->level->width;
+    float level_screen_size = (getViewportWidth() / (float)getViewportHeight()) * gm->level->height;
+    float zone_size = level_screen_size / (float)gm->level->width;
     
     // stop scrolling at the end of the map
     if (gm->level->progress < 1 - zone_size)
@@ -121,6 +121,7 @@ void updateGame() {
      // player shoot if is shooting
     if (gm->player->projectile_clock % 20 == 1) {
         playerShoot();
+        gm->player->projectile_clock ++;
     }
     
     // update player
@@ -131,11 +132,9 @@ void updateGame() {
     // Terrain
     int terrainType = isMobOnTerrain(*(gm->player), *(gm->level));
     if(terrainType != 0){
-        gm->player->vx *= -.5;
-        if (gm->player->vx >= 0)
-            gm->player->vx -= 2*PROGRESS_RATE;
+        gm->player->vx *= -2;
+        gm->player->vy *= -2;
         
-        gm->player->vy *= -.5;
         if(terrainType == 18)
             gm->level->status = 1;
         else
@@ -163,6 +162,11 @@ void updateGame() {
         
         updateEnemy(*curr, *(gm->player));
         
+        if (isMobOnTerrain(**curr, *(gm->level))) {
+            (*curr)->vx *= -1;
+            (*curr)->vy *= -1;
+        }
+        
         // ennemy shoot randomly if align with the player and is visible
         if ((rand() % 300) == 0 && fabs((*curr)->py - gm->player->py) < 0.1) {
             enemyShoot(**curr);
@@ -173,7 +177,7 @@ void updateGame() {
     curr = &(gm->enemy_projectiles);
     while (*curr != NULL) {
         updateProjectile(*curr);
-        
+    
         // delete projectile out of the screen
         if (isHidden(**curr)) {
             freeMob(curr);
@@ -321,7 +325,7 @@ void enemyShoot(Mob e) {
            e.py,
            
            // velocity vector
-           0.001 + gm->player->vx,
+           -(0.001 + e.vx),
            0
            );
 }

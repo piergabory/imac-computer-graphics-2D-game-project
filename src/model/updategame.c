@@ -33,7 +33,7 @@ void updatePlayer(Mob *p) {
         p->py = roundf(p->py);
     }
     
-    if (p->projectile_clock != 0) {
+    if (p->projectile_clock > 0) {
         p->projectile_clock++;
     }
 }
@@ -60,7 +60,7 @@ void updateEnemy(Mob *e, Mob p) {
         e->vy *= DRAG;
     } else {
         // move with a sine-wave pattern
-        e->vy = sinf((p.px - e->px)*100)/1000;
+        e->vy += sinf((p.px - e->px)*100)/100000;
     }
     
     e->px += e->vx;
