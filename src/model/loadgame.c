@@ -67,7 +67,6 @@ int loadWorld(char *path, Game *gm) {
     // read pixel data:
     
     unsigned int r = 0, g = 0, b = 0;
-    MobList tmp;
     
     for (unsigned int y = 0; y < height; y++)
         for (unsigned int x = 0; x < width; x++){
@@ -85,20 +84,12 @@ int loadWorld(char *path, Game *gm) {
             
             // CASE : enemy, allocate enemy in enemies list
             if (b == 0 && r == 0) {
-                if ((tmp = allocMob(ENEMY, x/(float) width, y/(float) height))!= NULL){
-                    tmp->next = gm->enemies;
-                    gm->enemies = tmp;
-                }
-                else return 4; // error malloc
+                if(newMob(&(gm->enemies), ENEMY, x/(float) width, y/(float) height, 0, 0) == NULL) return 4;
             }
             
             // CASE : bonus, allocate new bonus in moblist
             if (g== 0 && r == 0) {
-                if ((tmp = allocMob(BONUS, x/(float) width, y/(float) height))!= NULL) {
-                    tmp->next = gm->bonuses;
-                    gm->bonuses = tmp;
-                }
-                else return 4;  // error malloc
+                if(newMob(&(gm->bonuses), BONUS, x/(float) width, y/(float) height, 0, 0) == NULL) return 4;
             }
         }
     

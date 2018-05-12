@@ -37,7 +37,7 @@ void updatePlayer(Mob *p);
  * @param Mob *e reference to the enemy structure to update
  * @param Mob p copy of the player structure
  */
-void updateEnnemy(Mob *e, Mob p);
+void updateEnemy(Mob *e, Mob p);
 
 
 

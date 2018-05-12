@@ -7,7 +7,7 @@
 #define OBSTACLE 'o'
 #define PLAYER 'p'
 #define PROJECTILE 'j'
-#define ENNEMY_PROJECTILE 't'
+#define ENEMY_PROJECTILE 't'
 
 // mob structure define any moving entity (player, enemy, projectiles etc..)
 typedef struct mobile {
@@ -30,6 +30,12 @@ typedef struct mobile {
      * @var int health of the mob
      */
     int health;
+    
+    /**
+     * @var int projectile_clock
+     */
+    unsigned int projectile_clock;
+    
     
     /**
      * @var char type of the mob (defined above)

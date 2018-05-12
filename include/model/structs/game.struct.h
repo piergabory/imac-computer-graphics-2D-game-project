@@ -26,7 +26,7 @@ typedef struct game{
     /**
      * @var Chained list of flying enemy projectiles
      */
-    MobList ennemyProjectiles;
+    MobList enemy_projectiles;
     
     /**
      * @ref To the player's mobile struct

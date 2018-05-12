@@ -34,11 +34,13 @@ void draw() {
     glScalef(1.0/l.height, 1.0/l.height, 1.0);
     
     // move the viewport relative to the progress value
-    glTranslatef(-(l.progress * l.width),0,0);
+    glTranslatef(-(l.progress * l.width) + 0.5, 0.5, 0);
     
     
     // paint terrain
     drawTerrain(l, getViewportWidth(), getViewportHeight());
+    
+    glTranslatef(-1, -1, 0);
     
     // paint player
     glPushMatrix();
@@ -50,7 +52,7 @@ void draw() {
     drawMobList(BONUS, l, SPRITE_BONUS);
     drawMobList(ENEMY, l, SPRITE_ENEMY);
     drawMobList(PROJECTILE, l, SPRITE_PROJECTILE);
-    drawMobList(ENNEMY_PROJECTILE, l, SPRITE_ENNEMY_PROJECTILE);
+    drawMobList(ENEMY_PROJECTILE, l, SPRITE_ENEMY_PROJECTILE);
     
     // restore view matrix
     glPopMatrix();

@@ -32,6 +32,10 @@ void updatePlayer(Mob *p) {
         p->vy *= -1;
         p->py = roundf(p->py);
     }
+    
+    if (p->projectile_clock != 0) {
+        p->projectile_clock++;
+    }
 }
 
 
@@ -48,7 +52,7 @@ void updatePlayer(Mob *p) {
  * @param Mob *e reference to the enemy structure to update
  * @param Mob p copy of the player structure
  */
-void updateEnnemy(Mob *e, Mob p) {
+void updateEnemy(Mob *e, Mob p) {
     // if enemy close to player
     if (e->px - p.px < 0.1){
         // move velocity vector towards player
