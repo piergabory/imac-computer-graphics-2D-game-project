@@ -44,6 +44,7 @@ Level* allocLevel(unsigned int width, unsigned int height) {
  * -----------
  * Allocate memory for a mobile structure
  *
+ * @param MobList *list reference to the list where the mob will be pushed into
  * @param unsigned char type, type of mob (defined in header file)
  *
  * NOTE : Coordinates are a floating value between 0 and 1
@@ -52,21 +53,30 @@ Level* allocLevel(unsigned int width, unsigned int height) {
  * @param float x, position on X axis in level
  * @param float y, position on Y axis in level
  *
+ * @param float vx, speed
+ * @param float vy, speed
+ *
  * @return Level* adress to the allocated memory
  */
-Mob* allocMob(unsigned char type, float x, float y) {
+Mob* newMob(MobList *list, char type, float x, float y, float vx, float vy) {
     // malloc and check
-    Mob *new = (MobList)malloc(sizeof(Mob));
+    Mob *new = (MobList) malloc(sizeof(Mob));
     if (new == NULL) HANDLE_MALLOC;
     
     // initisalize values
     new->px = x;
     new->py = y;
-    new->health = 1;
-    new->type = type;
-    new->next = NULL;
     
-    return new;
+    new->vx = vx;
+    new->vy = vy;
+    
+    new->health = 1;
+    new->projectile_clock = 0;
+    
+    new->type = type;
+    new->next = *list;
+    
+    return *list = new;
 }
 
 
@@ -91,7 +101,7 @@ Game* allocGame() {
     new->enemies = NULL;
     new->bonuses = NULL;
     new->projectiles = NULL;
-    new->ennemyProjectiles = NULL;
+    new->enemy_projectiles = NULL;
     
     // check for malloc success
     if(new == NULL || new->player == NULL) HANDLE_MALLOC;
@@ -146,23 +156,27 @@ void freeGame(Game *gm) {
     
     // free level
     free(gm->level);
+    gm->level = NULL
     
     
     // MOB LISTS
     
     // free mobs out of their list while the list has items.
-    while (gm->enemies == NULL)
+    while (gm->enemies != NULL) {
         freeMob(&(gm->enemies));
+    }
     
-    while (gm->bonuses == NULL)
+    while (gm->bonuses != NULL) {
         freeMob(&(gm->bonuses));
+    }
     
-    while (gm->projectiles == NULL)
+    while (gm->projectiles != NULL) {
         freeMob(&(gm->projectiles));
+    }
  
-    while (gm->ennemyProjectiles == NULL)
-        freeMob(&(gm->ennemyProjectiles));
-    
+    while (gm->enemy_projectiles != NULL) {
+        freeMob(&(gm->enemy_projectiles));
+    }
     
     // free game structure
     free(gm);

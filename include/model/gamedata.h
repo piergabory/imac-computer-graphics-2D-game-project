@@ -26,21 +26,26 @@ Level* allocLevel(unsigned int width, unsigned int height);
 
 
 /**
- * Alloc Mob
+ * New Mob
  * -----------
  * Allocate memory for a mobile structure
  *
+ * @param MobList *list reference to the list where the mob will be pushed into
  * @param unsigned char type, type of mob (defined in mob.struct)
  *
  * NOTE : Coordinates are a floating value between 0 and 1
  *        relative to the level dimentions.
  *        (ie: X=1 is on the end border of the world)
+ *
  * @param float x, position on X axis in level
  * @param float y, position on Y axis in level
  *
+ * @param float vx, speed
+ * @param float vy, speed
+ *
  * @return Level* adress to the allocated memory
  */
-Mob* allocMob(unsigned char type, float x, float y);
+Mob* newMob(MobList *list, char type, float x, float y, float vx, float vy) ;
 
 
 /**
