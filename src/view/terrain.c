@@ -27,7 +27,7 @@ void drawTerrain(Level l, unsigned int vw, unsigned int vh){
             glPushMatrix();
             
             // move to the terrain bloc position
-            glTranslatef(x+0.5,y+0.5,0);
+            glTranslatef(x,y,0);
             
             // draw terrain sprite
             if (l.map[y][x] != 0) {

@@ -26,7 +26,7 @@
 
 
 // Player speed limit
-#define MAX_SPEED 1
+#define MAX_SPEED 0.005
 
 
 // Health Damages/Bonuses
@@ -124,6 +124,16 @@ void playerHit(MobList *ml, int damage);
  */
 void playerShoot();
 
+/**
+ * Player Start Shooting
+ */
+void playerStartShooting();
+
+/**
+ * Player Stop Shooting
+ */
+void playerStopShooting();
+
 
 /**
  * Change Player Speed
@@ -156,7 +166,7 @@ void playerHealth(int value);
  * Spawns an ennemy projectile on a mob, with a fixed negative X velocity.
  * @param Mob e (ennemy), projectile source.
  */
-void ennemyShoot(Mob e);
+void enemyShoot(Mob e);
 
 
 /**

@@ -15,7 +15,7 @@
 // a entity can have multiple sprites next to each other
 #define SPRITE_WALL 0
 #define SPRITE_PROJECTILE 18
-#define SPRITE_ENNEMY_PROJECTILE 23
+#define SPRITE_ENEMY_PROJECTILE 23
 #define SPRITE_PLAYER 19
 #define SPRITE_BONUS 21
 #define SPRITE_ENEMY 22

@@ -26,7 +26,7 @@ MobList getMobList(char mob) {
         case 'e': return gm->enemies;
         case 'b': return gm->bonuses;
         case 'j': return gm->projectiles;
-        case 't': return gm->ennemyProjectiles;
+        case 't': return gm->enemy_projectiles;
         case 'p': return gm->player;
         default: return NULL;
     }
@@ -54,8 +54,6 @@ int initGame() {
     // initialize mob lists
     gm->enemies = NULL;
     gm->bonuses = NULL;
-    gm->projectiles = NULL;
-    gm->ennemyProjectiles = NULL;
     
     
     // set level, ennemies and bonuses data
@@ -64,6 +62,9 @@ int initGame() {
         return 0;
     }
     
+    // initialise projectiles lists
+    gm->projectiles = NULL;
+    gm->enemy_projectiles = NULL;
     
     // initialize level status to 'playing'
     gm->level->status = STATUS_PLAYING;
@@ -116,7 +117,12 @@ void updateGame() {
     // stop scrolling at the end of the map
     if (gm->level->progress < 1 - zone_size)
         gm->level->progress += PROGRESS_RATE;
-
+    
+     // player shoot if is shooting
+    if (gm->player->projectile_clock % 20 == 1) {
+        playerShoot();
+    }
+    
     // update player
     updatePlayer(gm->player);
     
@@ -125,7 +131,6 @@ void updateGame() {
     // Terrain
     int terrainType = isMobOnTerrain(*(gm->player), *(gm->level));
     if(terrainType != 0){
-        printf("ouch!\n");
         gm->player->vx *= -.5;
         if (gm->player->vx >= 0)
             gm->player->vx -= 2*PROGRESS_RATE;
@@ -143,7 +148,7 @@ void updateGame() {
     // Bonus, Enemy and Enemy Projectile
     playerHit(&(gm->bonuses), BONUS_HEALTH);
     playerHit(&(gm->enemies), ENEMY_DAMAGE);
-    playerHit(&(gm->ennemyProjectiles), PROJECTILE_DAMAGE);
+    playerHit(&(gm->enemy_projectiles), PROJECTILE_DAMAGE);
     
     //// END PLAYER COLLISIONS
 
@@ -156,21 +161,30 @@ void updateGame() {
     for (curr = &(gm->enemies); *curr != NULL; curr = &((*curr)->next)) {
         if(isHidden(**curr)) continue;
         
-        updateEnnemy(*curr, *(gm->player));
+        updateEnemy(*curr, *(gm->player));
         
         // ennemy shoot randomly if align with the player and is visible
         if ((rand() % 300) == 0 && fabs((*curr)->py - gm->player->py) < 0.1) {
-            ennemyShoot(**curr);
+            enemyShoot(**curr);
         }
     }
     
-    for (curr = &(gm->ennemyProjectiles); *curr != NULL; curr = &((*curr)->next)) {
-        if(isHidden(**curr)) continue;
+    // enemy projectiles
+    curr = &(gm->enemy_projectiles);
+    while (*curr != NULL) {
         updateProjectile(*curr);
+        
+        // delete projectile out of the screen
+        if (isHidden(**curr)) {
+            freeMob(curr);
+        } else {
+            curr = &((*curr)->next);
+        }
     }
     
     // projectiles
-    for (curr = &(gm->projectiles); *curr != NULL; curr = &((*curr)->next)) {
+    curr = &(gm->projectiles);
+    while (*curr != NULL) {
         // projectile is flying
         updateProjectile(*curr);
         
@@ -185,6 +199,13 @@ void updateGame() {
             freeMob(target);
             freeMob(curr);
             break;
+        }
+        
+        // if projectile left the frame, delete it
+        if (isHidden(**curr)) {
+            freeMob(curr);
+        } else {
+            curr = &((*curr)->next);
         }
     }
 }
@@ -219,10 +240,33 @@ void playerHit(MobList *ml, int damage) {
  * Spawns a player projectile on the player, with a fixed X velocity.
  */
 void playerShoot() {
-    Mob *tmp = gm->projectiles;
-    gm->projectiles = allocMob(PROJECTILE, gm->player->px, gm->player->py);
-    gm->projectiles->next = tmp;
-    gm->projectiles->vx = 0.001;
+    newMob(
+           // type
+           &(gm->projectiles),  // list
+           PROJECTILE,      // type
+           
+           // position
+           gm->player->px,
+           gm->player->py,
+           
+           // velocity vector
+           0.001 + gm->player->vx,
+           0
+           );
+}
+
+/**
+ * Player Start Shooting
+ */
+void playerStartShooting() {
+    gm->player->projectile_clock = 1;
+}
+
+/**
+ * Player Stop Shooting
+ */
+void playerStopShooting() {
+    gm->player->projectile_clock = 0;
 }
 
 
@@ -236,8 +280,8 @@ void playerShoot() {
  * @param float vy, Y axis incrementation
  */
 void changePlayerSpeedBy(float vx, float vy) {
-    if (fabs(gm->player->vx + vx) < MAX_SPEED) gm->player->vx += vx;
-    if (fabs(gm->player->vy + vy) < MAX_SPEED) gm->player->vy += vy;
+    gm->player->vx = vx * MAX_SPEED * gm->level->height / (float)gm->level->width;
+    gm->player->vy = vy * MAX_SPEED;
 }
 
 /**
@@ -266,12 +310,20 @@ void playerHealth(int value) {
  * Spawns an ennemy projectile on a mob, with a fixed negative X velocity.
  * @param Mob e (ennemy), projectile source.
  */
-void ennemyShoot(Mob e) {
-    if (e.type != ENEMY) return; // only enemies can shoot
-    Mob *tmp = gm->ennemyProjectiles;
-    gm->ennemyProjectiles = allocMob(ENNEMY_PROJECTILE, e.px, e.py);
-    gm->ennemyProjectiles->next = tmp;
-    gm->ennemyProjectiles->vx = -0.001;
+void enemyShoot(Mob e) {
+    newMob(
+           // type
+           &(gm->enemy_projectiles),  // list
+           ENEMY_PROJECTILE,      // type
+           
+           // position
+           e.px,
+           e.py,
+           
+           // velocity vector
+           0.001 + gm->player->vx,
+           0
+           );
 }
 
 
