@@ -3,6 +3,8 @@
 
 #include <math.h>
 
+#include "support/window.h"
+#include "view/events.h"
 #include "gamedata.h"
 
 // drag effect on the player
@@ -10,6 +12,10 @@
 
 // fixed speed at witch the level moves towards the end
 #define PROGRESS_RATE 0.0003
+
+// Player speed limit
+#define PROJECTILE_SPEED 0.1
+#define PLAYER_SPEED 0.1
 
 
 /**
@@ -22,7 +28,7 @@
  *
  * @param Mob *p reference to the player mob structure
  */
-void updatePlayer(Mob *p);
+void updatePlayer(Mob *p, Level l);
 
 
 

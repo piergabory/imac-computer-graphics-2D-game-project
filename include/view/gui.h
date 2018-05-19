@@ -3,6 +3,7 @@
 
 #include "view/sprites.h"
 #include "support/window.h"
+#include "model/structs/level.struct.h"
 
 /**
  * Draw Health Bar
@@ -12,4 +13,10 @@
  */
 void drawHealthBar(int health);
 
+
+/**
+ * Draws appropriate screen depending on gamestate
+ */
+
+void drawAppropriateScreen(GameStatus status);
 #endif /* gui_h */

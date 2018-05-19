@@ -1,35 +1,50 @@
 #ifndef sprites_h
 #define sprites_h
 
-#include "support/frameworks.h"
 #include "support/messages.h"
+#include "support/window.h"
+#include "model/structs/mob.struct.h"
 
 // texture file path
 #define TEXTURE_FILE "textures.png"
 
 // texture grid dimentions
 #define TEXTURE_COL 8
-#define TEXTURE_ROW 8
+#define TEXTURE_ROW 22
+
+// screen values in texture grid cells
+#define SCREEN_BEGIN 4 // row after which screens begin
+#define SCREEN_WIDTH 8 
+#define SCREEN_HEIGHT 6
+
+#define SCREEN_COUNT 3
 
 // texture indexes
 // a entity can have multiple sprites next to each other
-#define SPRITE_WALL 0
-#define SPRITE_PROJECTILE 18
-#define SPRITE_ENEMY_PROJECTILE 26
-#define SPRITE_PLAYER 19
-#define SPRITE_BONUS 21
-#define SPRITE_ENEMY 24
-#define SPRITE_DEFEAT 27
-#define SPRITE_VICTORY 28
-#define SPRITE_EMPTY 29
+typedef enum {
+    SPRITE_WALL = 0,
+    SPRITE_PROJECTILE = 18,
+    SPRITE_PLAYER,
+    SPRITE_BONUS = 21,
+    SPRITE_ENEMY = 24,
+    SPRITE_ENEMY_PROJECTILE = 26
+} Sprite;
 
-#define SPRITE_WALL_ALT_COUNT 16
-#define SPRITE_PLAYER_ALT_COUNT 2
-#define SPRITE_BONUS_ALT_COUNT 1
-#define SPRITE_ENEMY_ALT_COUNT 2
-#define SPRITE_PROJECTILE_ALT_COUNT 1
-#define SPRITE_ENEMY_PROJECTILE_ALT_COUNT 1
+// Sprite alternatives count
+typedef enum {
+    ALT_WALL = 6,
+    ALT_PLAYER = 2,
+    ALT_BONUS = 1,
+    ALT_ENEMY = 2,
+    ALT_PROJECTILE = 1,
+    ALT_ENEMY_PROJECTILE = 1
+} SpriteAlt;
 
+typedef enum {
+    SCREEN_GAME_OVER,
+    SCREEN_LEVEL_COMPLETE,
+    SCREEN_PRESS_SPACEBAR
+} Screen;
 
 // total sprites
 #define SPRITES_COUNT 30
@@ -52,13 +67,19 @@ int initSprites();
  *
  * @param const unsigned int index of the sprite.
  */
-void drawSprite(const unsigned int spriteindex);
+void drawSprite(Sprite index);
+void drawScreen(Screen index);
 
+/**
+ * Get sprite id from mobtype
+ */
+void getSprite(MobType type, Sprite *, SpriteAlt *);
 
 /**
  * Sprite lists array
  * Static @var GLuint sptiresGlus
  */
 static GLuint spritesGlus;
+static GLuint screenGlus;
 
 #endif /* sprites_h */

@@ -1,6 +1,13 @@
 #include "view/events.h"
 
 /**
+ * Return boolean for a key, true if pressed
+ */
+int getTriggerStatus(Triggers key) {
+    return ActiveTriggers[key];
+}
+
+/**
  * EVENT LOOP
  * ----------
  * SDL event loop handler
@@ -19,8 +26,7 @@ int eventLoop() {
             switch (e.key.keysym.sym) {
                 // action keys
                 case SDLK_SPACE: // Spacebar
-                    // shoot
-                    playerStartShooting();
+                    ActiveTriggers[SPACE] = 1;
                     
                     // restart game if stopped
                     if (getLevel().status != 0) resetGame();
@@ -28,49 +34,51 @@ int eventLoop() {
                 
                 // direction keys
                 case SDLK_z: case SDLK_UP: // Z key / up arrow
-                    changePlayerSpeedBy(0, -1);
+                    ActiveTriggers[UP] = 1;
                     break;
                     
                 case SDLK_s: case SDLK_DOWN: // S key / down arrow
-                    changePlayerSpeedBy(0, 1);
+                    ActiveTriggers[DOWN] = 1;
                     break;
                     
                 case SDLK_q: case SDLK_LEFT: // Q key / left arrow
-                    changePlayerSpeedBy(-1, 0);
+                    ActiveTriggers[LEFT] = 1;
                     break;
                     
                 case SDLK_d: case SDLK_RIGHT: // D key / right arrow
-                    changePlayerSpeedBy(1, 0);
+                    ActiveTriggers[RIGHT] = 1;
                     break;
                     
                 // escape key
                 case SDLK_ESCAPE:
                     // terminate program if game has ended
-                    if (getLevel().status != 0) return 0;
+                    if (getLevel().status != PLAYING) return 0;
             }
             break;
             
         case SDL_KEYUP :
             switch (e.key.keysym.sym) {
+                    // action keys
+                case SDLK_SPACE: // Spacebar
+                    ActiveTriggers[SPACE] = 0;
+                    break;
+                    
+                    // direction keys
                 case SDLK_z: case SDLK_UP: // Z key / up arrow
-                    changePlayerSpeedBy(0, -0.1);
+                    ActiveTriggers[UP] = 0;
                     break;
                     
                 case SDLK_s: case SDLK_DOWN: // S key / down arrow
-                    changePlayerSpeedBy(0, 0.1);
+                    ActiveTriggers[DOWN] = 0;
                     break;
                     
                 case SDLK_q: case SDLK_LEFT: // Q key / left arrow
-                    changePlayerSpeedBy(-0.1, 0);
+                    ActiveTriggers[LEFT] = 0;
                     break;
                     
                 case SDLK_d: case SDLK_RIGHT: // D key / right arrow
-                    changePlayerSpeedBy(0.1, 0);
+                    ActiveTriggers[RIGHT] = 0;
                     break;
-                
-                case SDLK_SPACE: // Spacebar
-                    // shoot
-                    playerStopShooting();
             }
             break;
             

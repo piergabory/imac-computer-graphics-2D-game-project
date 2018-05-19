@@ -8,7 +8,6 @@
 #include "terrain.h"
 #include "gui.h"
 
-
 /**
  * INIT VIEW
  * ----------

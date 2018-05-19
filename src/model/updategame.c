@@ -10,7 +10,34 @@
  *
  * @param Mob *p reference to the player mob structure
  */
-void updatePlayer(Mob *p) {
+void updatePlayer(Mob *p, Level l) {
+    int up, down, left, right;
+    
+    up = getTriggerStatus(UP);
+    down = getTriggerStatus(DOWN);
+    left = getTriggerStatus(LEFT);
+    right = getTriggerStatus(RIGHT);
+    
+    // stop if no key are pressed
+    if (!(up || down || left || right)) {
+        p->vy *= 0.1;
+        p->vx *= 0.1;
+    }
+    
+    // horizontal speed
+    if (up && !down) {
+        p->vy = -PLAYER_SPEED / l.height;
+    } else if (!up && down) {
+        p->vy = PLAYER_SPEED / l.height;
+    }
+    
+    // vertical speed
+    if (left && !right) {
+        p->vx = -PLAYER_SPEED / l.width;
+    } else if (!left && right) {
+        p->vx = PLAYER_SPEED / l.width;
+    }
+    
     
     // position from velocity
     p->px += p->vx + PROGRESS_RATE;
@@ -33,8 +60,11 @@ void updatePlayer(Mob *p) {
         p->py = roundf(p->py);
     }
     
-    if (p->projectile_clock > 0) {
+    // player shoot
+    if (getTriggerStatus(SPACE)) {
         p->projectile_clock++;
+    } else {
+        p->projectile_clock = 0;
     }
 }
 

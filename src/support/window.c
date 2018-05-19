@@ -70,11 +70,11 @@ void updateViewport(int w, int h) {
     
     // get viewport aspect ratio
     float vwr = 1,vhr = 1;
-    if (WINDOW_WIDTH > WINDOW_HEIGHT) {
+//    if (WINDOW_WIDTH > WINDOW_HEIGHT) {
         vwr = WINDOW_WIDTH/(float)WINDOW_HEIGHT;
-    } else {
-        vhr = WINDOW_HEIGHT/(float)WINDOW_WIDTH;
-    }
+//    } else {
+//        vhr = WINDOW_HEIGHT/(float)WINDOW_WIDTH;
+//    }
     
     // reset view matrix
     SET_ORTHO_MATRIX(0, vwr, vhr, 0);
@@ -94,3 +94,8 @@ unsigned int getViewportWidth() { return WINDOW_WIDTH; }
  * @return unsigned int viewport's height in pixels
  */
 unsigned int getViewportHeight() { return WINDOW_HEIGHT; }
+
+/**
+ * @return float viewport's aspect ratio
+ */
+float getAspectRatio() { return WINDOW_WIDTH/(float)WINDOW_HEIGHT; }

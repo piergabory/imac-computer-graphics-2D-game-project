@@ -6,10 +6,42 @@
  *
  * Prints a sprite on the screen.
  */
-void drawSprite(const unsigned int spriteindex) {
-    glCallList(spritesGlus + spriteindex);
+void drawSprite(Sprite index) {
+    glCallList(spritesGlus + index);
 }
 
+void drawScreen(Screen index) {
+    glCallList(screenGlus + index);
+}
+
+void getSprite(MobType type, Sprite *s, SpriteAlt *a) {
+    switch (type) {
+        case ENEMY:
+            *s = SPRITE_ENEMY;
+            *a = ALT_ENEMY;
+            break;
+            
+        case BONUS:
+            *s = SPRITE_BONUS;
+            *a = ALT_BONUS;
+            break;
+            
+        case PLAYER:
+            *s = SPRITE_PLAYER;
+            *a = ALT_PLAYER;
+            break;
+            
+        case PROJECTILE:
+            *s = SPRITE_PROJECTILE;
+            *a = ALT_PROJECTILE;
+            break;
+            
+        case ENEMY_PROJECTILE:
+            *s = SPRITE_ENEMY_PROJECTILE;
+            *a = ALT_ENEMY_PROJECTILE;
+            break;
+    }
+}
 
 /**
  * INIT SPRITES
@@ -45,9 +77,8 @@ int initSprites() {
     // free image data
     SDL_FreeSurface(image);
 
-    
 
-    ////// prepare GLU list
+    ////// prepare GLU lists
 
     // init texture coordinates variables
     float textureWidth = 1.0/TEXTURE_COL;
@@ -82,6 +113,44 @@ int initSprites() {
         
         glTexCoord2f(textureX + textureWidth, textureY);
         glVertex2f(0.5, -0.5);
+        
+        // close list
+        glEnd();
+        glDisable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glEndList();
+    } /* end for */
+    
+    
+    float screenWidth = SCREEN_WIDTH * textureWidth;
+    float screenHeight = SCREEN_HEIGHT * textureHeight;
+    float screenBegin = SCREEN_BEGIN * textureHeight;
+
+    // init lists
+    screenGlus = glGenLists(SCREEN_COUNT);
+    
+    // for each sprite of the texture file
+    for (int i = 0; i < SCREEN_COUNT; i++) {
+        
+        // init glu list
+        glNewList(screenGlus + i,GL_COMPILE);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texId);
+        glBegin(GL_QUADS);
+        
+        // drawing a square and apply the sprite:
+        // vertex and their matching texture coordinates
+        glTexCoord2f(screenWidth, screenHeight * (i+1) + screenBegin);
+        glVertex2f(0.5, 0.5 / getAspectRatio());
+        
+        glTexCoord2f(0, screenHeight * (i+1) + screenBegin);
+        glVertex2f(-0.5, 0.5 / getAspectRatio());
+        
+        glTexCoord2f(0, screenHeight * i + screenBegin);
+        glVertex2f(-0.5, -0.5 / getAspectRatio());
+        
+        glTexCoord2f(screenWidth, screenHeight * i + screenBegin);
+        glVertex2f(0.5, -0.5 / getAspectRatio());
         
         // close list
         glEnd();

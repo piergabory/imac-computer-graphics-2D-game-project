@@ -16,3 +16,29 @@ void drawHealthBar(int health) {
     }
     glPopMatrix();
 }
+
+/**
+ * Draws appropriate screen depending on gamestate
+ */
+void drawAppropriateScreen(GameStatus status) {
+    // save view matrix
+    glPushMatrix();
+    
+    // print screen
+    glTranslatef(0.5 * getAspectRatio(), 0.5, 0);
+    
+    // if GAME OVER
+    if (status == GAME_OVER) {
+        glClear(GL_COLOR_BUFFER_BIT);
+        drawScreen(SCREEN_GAME_OVER);
+    }
+    
+    // IF LEVEL COMPLETE
+    else if (status == LEVEL_COMPLETE) {
+        glClear(GL_COLOR_BUFFER_BIT);
+        drawScreen(SCREEN_LEVEL_COMPLETE);
+    }
+    
+    // restore view matrix
+    glPopMatrix();
+}

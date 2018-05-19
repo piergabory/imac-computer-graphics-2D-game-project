@@ -23,6 +23,7 @@ Level* allocLevel(unsigned int width, unsigned int height) {
     new->width = width;
     new->height = height;
     new->progress = 0;
+    new->status = GAME_OVER;
     
     // allocate map
     new->map = (unsigned int**) calloc(height, sizeof(unsigned int*));
@@ -58,7 +59,7 @@ Level* allocLevel(unsigned int width, unsigned int height) {
  *
  * @return Level* adress to the allocated memory
  */
-Mob* newMob(MobList *list, char type, float x, float y, float vx, float vy) {
+Mob* newMob(MobList *list, MobType type, float x, float y, float vx, float vy) {
     // malloc and check
     Mob *new = (MobList) malloc(sizeof(Mob));
     if (new == NULL) HANDLE_MALLOC;

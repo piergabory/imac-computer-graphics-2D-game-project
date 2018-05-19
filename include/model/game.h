@@ -24,23 +24,22 @@
 // physics between mobs (and the ground)
 #include "collisions.h"
 
-
-// Player speed limit
-#define MAX_SPEED 0.005
+// Player default health
+#define PLAYER_STARTING_HEALTH 5
 
 
 // Health Damages/Bonuses
-#define ENEMY_DAMAGE -3
-#define PROJECTILE_DAMAGE -1
-#define WALL_DAMAGE -1
-#define BONUS_HEALTH 5
-
+typedef enum {
+    ENEMY_DMG = -3,
+    BONUS_DMG = 1,
+    OBSTACLE_DMG = -1,
+    ENEMY_PROJECTILE_DMG = -1
+} Damage;
 
 /**
  * Static global @ref to the active game structure
  */
 static Game *gm = NULL;
-
 
 
 //// GETTERS
@@ -62,7 +61,7 @@ Mob getPlayer();
  * @param char Mobtype (defined in model/structs/mob.struct.h)
  * @return MobList of selected type, from the active game structure
  */
-MobList getMobList(char mob);
+MobList getMobList(MobType type);
 
 
 
@@ -124,27 +123,6 @@ void playerHit(MobList *ml, int damage);
  */
 void playerShoot();
 
-/**
- * Player Start Shooting
- */
-void playerStartShooting();
-
-/**
- * Player Stop Shooting
- */
-void playerStopShooting();
-
-
-/**
- * Change Player Speed
- * -------------------
- * Nudges the player's velocity vector by increments.
- * Checks if the velocity is'nt exceeding maximum speed.
- *
- * @param float vx, X axis incrementation
- * @param float vy, Y axis incrementation
- */
-void changePlayerSpeedBy(float vx, float vy);
 
 
 /**
@@ -155,7 +133,7 @@ void changePlayerSpeedBy(float vx, float vy);
  *
  * @param int health increment
  */
-void playerHealth(int value);
+void playerHealth(Damage value);
 
 
 

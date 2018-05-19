@@ -21,14 +21,13 @@ Mob getPlayer() { return *(gm->player); }
  * @param char Mobtype (defined in model/structs/mob.struct.h)
  * @return MobList of selected type, from the active game structure
  */
-MobList getMobList(char mob) {
-    switch (mob) {
-        case 'e': return gm->enemies;
-        case 'b': return gm->bonuses;
-        case 'j': return gm->projectiles;
-        case 't': return gm->enemy_projectiles;
-        case 'p': return gm->player;
-        default: return NULL;
+MobList getMobList(MobType type) {
+    switch (type) {
+        case ENEMY: return gm->enemies;
+        case BONUS: return gm->bonuses;
+        case PROJECTILE: return gm->projectiles;
+        case ENEMY_PROJECTILE: return gm->enemy_projectiles;
+        case PLAYER: return gm->player;
     }
 }
 
@@ -67,7 +66,7 @@ int initGame() {
     gm->enemy_projectiles = NULL;
     
     // initialize level status to 'playing'
-    gm->level->status = STATUS_PLAYING;
+    gm->level->status = PLAYING;
     
     
     // -- initialise player
@@ -80,7 +79,7 @@ int initGame() {
     gm->player->vx = 0;
     gm->player->vy = 0;
     
-    gm->player->health = 20;
+    gm->player->health = PLAYER_STARTING_HEALTH;
     gm->player->type = PLAYER;
     gm->player->next = NULL;
     
@@ -111,6 +110,8 @@ void resetGame() {
  * Should be called in the SDL main loop
  */
 void updateGame() {
+    if (gm->level->status != PLAYING) return; 
+    
     float level_screen_size = (getViewportWidth() / (float)getViewportHeight()) * gm->level->height;
     float zone_size = level_screen_size / (float)gm->level->width;
     
@@ -125,29 +126,35 @@ void updateGame() {
     }
     
     // update player
-    updatePlayer(gm->player);
+    updatePlayer(gm->player, *(gm->level));
     
     //// PLAYER COLLISIONS
     
     // Terrain
-    int terrainType = isMobOnTerrain(*(gm->player), *(gm->level));
-    if(terrainType != 0){
-        gm->player->vx *= -2;
-        gm->player->vy *= -2;
-        
-        if(terrainType == 18)
-            gm->level->status = 1;
-        else
-            playerHealth(WALL_DAMAGE);
+    switch (isMobOnTerrain(*(gm->player), *(gm->level))) {
+        case OBSTACLE:
+            playerHealth(OBSTACLE_DMG);
+            gm->player->vx += PROGRESS_RATE*2;
+            gm->player->vx *= -1;
+            gm->player->vy *= -1;
+            break;
+            
+        case VOID:
+            // do nothing
+            break;
+            
+        case FINISH_LINE:
+            gm->level->status = LEVEL_COMPLETE;
+            break;
     }
     
     // player cant leave the screen.
     if (gm->player->px < gm->level->progress) gm->player->px = gm->level->progress;
     
     // Bonus, Enemy and Enemy Projectile
-    playerHit(&(gm->bonuses), BONUS_HEALTH);
-    playerHit(&(gm->enemies), ENEMY_DAMAGE);
-    playerHit(&(gm->enemy_projectiles), PROJECTILE_DAMAGE);
+    playerHit(&(gm->bonuses), BONUS_DMG);
+    playerHit(&(gm->enemies), ENEMY_DMG);
+    playerHit(&(gm->enemy_projectiles), ENEMY_PROJECTILE_DMG);
     
     //// END PLAYER COLLISIONS
 
@@ -254,39 +261,11 @@ void playerShoot() {
            gm->player->py,
            
            // velocity vector
-           0.001 + gm->player->vx,
+           PLAYER_SPEED * 1.01 /gm->level->height,
            0
            );
 }
 
-/**
- * Player Start Shooting
- */
-void playerStartShooting() {
-    gm->player->projectile_clock = 1;
-}
-
-/**
- * Player Stop Shooting
- */
-void playerStopShooting() {
-    gm->player->projectile_clock = 0;
-}
-
-
-/**
- * Change Player Speed
- * -------------------
- * Nudges the player's velocity vector by increments.
- * Checks if the velocity is'nt exceeding maximum speed.
- *
- * @param float vx, X axis incrementation
- * @param float vy, Y axis incrementation
- */
-void changePlayerSpeedBy(float vx, float vy) {
-    gm->player->vx = vx * MAX_SPEED * gm->level->height / (float)gm->level->width;
-    gm->player->vy = vy * MAX_SPEED;
-}
 
 /**
  * Player Health
@@ -296,9 +275,9 @@ void changePlayerSpeedBy(float vx, float vy) {
  *
  * @param int health increment
  */
-void playerHealth(int value) {
+void playerHealth(Damage value) {
     if ((gm->player->health + value) < 0) {
-        gm->level->status = STATUS_GAME_OVER;
+        gm->level->status = GAME_OVER;
     } else {
         gm->player->health += value;
     }

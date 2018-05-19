@@ -19,28 +19,28 @@ static void setHitbox(char mobType, float *w, float *h) {
     
     switch (mobType) {
         case ENEMY:
-            *w = scalex * ENEMY_W;
-            *h = scaley * ENEMY_H;
+            *w = scalex * 1;
+            *h = scaley * 1;
             break;
             
         case PLAYER:
-            *w = scalex * PLAYER_W;
-            *h = scaley * PLAYER_H;
+            *w = scalex * 1;
+            *h = scaley * 1;
             break;
             
         case BONUS:
-            *w = scalex * BONUS_W;
-            *h = scaley * BONUS_H;
+            *w = scalex * 0.6;
+            *h = scaley * 0.6;
             break;
             
         case PROJECTILE:
-            *w = scalex * PROJECTILE_W;
-            *h = scaley * PROJECTILE_H;
+            *w = scalex * 0.4;
+            *h = scaley * 0.2;
             break;
             
         case ENEMY_PROJECTILE:
-            *w = scalex * ENEMY_PROJECTILE_W;
-            *h = scaley * ENEMY_PROJECTILE_H;
+            *w = scalex * 0.4;
+            *h = scaley * 0.2;
             break;
     }
 }
@@ -57,7 +57,7 @@ static void setHitbox(char mobType, float *w, float *h) {
  *
  * @return int terrain type, 0 if no collisions
  */
-int isMobOnTerrain(Mob m, Level l) {
+TerrainType isMobOnTerrain(Mob m, Level l) {
     float mw, mh;
     setHitbox(m.type, &mw, &mh);
     
@@ -67,10 +67,16 @@ int isMobOnTerrain(Mob m, Level l) {
     int maxCol = (int)((m.px) * l.width) % l.width;
     int maxRow = (int)((m.py + mh) * l.height) % (l.height-1);
     
-    if (l.map[minRow][minCol] || l.map[maxRow][maxCol])
-        return l.map[minRow][minCol];
+    if (l.map[maxRow][maxCol] == FINISH_LINE || l.map[minRow][maxCol] == FINISH_LINE) {
+        return FINISH_LINE;
+    }
+    
+    if (l.map[minRow][minCol] || l.map[maxRow][maxCol] || l.map[minRow][maxCol] || l.map[maxRow][minCol]) {
+        return OBSTACLE;
+    }
+    
     else
-        return 0;
+        return VOID;
 }
 
 

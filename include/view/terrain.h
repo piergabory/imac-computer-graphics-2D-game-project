@@ -13,9 +13,7 @@
  * Displays the world.
  *
  * @param Level l, world to display
- * @param unsigned int vw, viewport width in pixels
- * @param unsigned int vh, viewport height in pixels
  */
-void drawTerrain(Level l, unsigned int vw, unsigned int vh);
+void drawTerrain(Level l);
 
 #endif /* obstacles_h */

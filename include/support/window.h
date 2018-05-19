@@ -66,4 +66,9 @@ unsigned int getViewportWidth();
  */
 unsigned int getViewportHeight();
 
+/**
+ * @return float viewport's aspect ratio
+ */
+float getAspectRatio();
+
 #endif /* window_init_h */

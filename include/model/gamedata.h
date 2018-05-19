@@ -45,7 +45,7 @@ Level* allocLevel(unsigned int width, unsigned int height);
  *
  * @return Level* adress to the allocated memory
  */
-Mob* newMob(MobList *list, char type, float x, float y, float vx, float vy) ;
+Mob* newMob(MobList *list, MobType type, float x, float y, float vx, float vy) ;
 
 
 /**

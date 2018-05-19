@@ -1,16 +1,17 @@
 #ifndef mob_struct_h
 #define mob_struct_h
 
-//// Mob types definitions.
-#define ENEMY 'e'
-#define BONUS 'b'
-#define OBSTACLE 'o'
-#define PLAYER 'p'
-#define PROJECTILE 'j'
-#define ENEMY_PROJECTILE 't'
+//// Mob types definition
+typedef enum {
+    ENEMY,
+    BONUS,
+    PLAYER,
+    PROJECTILE,
+    ENEMY_PROJECTILE
+} MobType;
 
 // mob structure define any moving entity (player, enemy, projectiles etc..)
-typedef struct mobile {
+typedef struct _mobile {
     /**
      * Velocity vector
      * @var float vx, X coord of velocity vector
@@ -40,10 +41,10 @@ typedef struct mobile {
     /**
      * @var char type of the mob (defined above)
      */
-    unsigned char type;
+    MobType type;
     
     //// @ref to the next mob chain link
-    struct mobile *next;
+    struct _mobile *next;
 } Mob, *MobList;
 
 

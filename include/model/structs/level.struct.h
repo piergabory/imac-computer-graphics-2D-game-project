@@ -2,9 +2,17 @@
 #define level_struct_h
 
 // statuses
-#define STATUS_PLAYING 0
-#define STATUS_LEVEL_COMPLETE 1
-#define STATUS_GAME_OVER -1
+typedef enum {
+    PLAYING,
+    LEVEL_COMPLETE,
+    GAME_OVER
+} GameStatus;
+
+typedef enum {
+    VOID,
+    OBSTACLE,
+    FINISH_LINE = 18
+} TerrainType;
 
 // level structure collecting world obstacles and game progress
 typedef struct level {
@@ -20,7 +28,7 @@ typedef struct level {
      * -> positive if player has reached the end of level safely
      * -> negative if the player died
      */
-    int status;
+    GameStatus status;
     
     /**
      * Level dimentions in 'blocks'

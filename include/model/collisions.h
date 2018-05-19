@@ -17,7 +17,7 @@
  *
  * @return int terrain type, 0 if no collisions
  */
-int isMobOnTerrain(Mob m, Level l);
+TerrainType isMobOnTerrain(Mob m, Level l);
 
 
 /**
@@ -45,28 +45,5 @@ int isMobOnMob(Mob m1, Mob m2);
  * @return NULL if no collisions
  */
 MobList *isMobOnMoblist(Mob m, MobList *ml);
-
-
-//// mob sizes relative to a sprite size
-
-// enemy
-#define ENEMY_W 1
-#define ENEMY_H 1
-
-// player
-#define PLAYER_W 1
-#define PLAYER_H 1
-
-// bonus
-#define BONUS_W 0.6
-#define BONUS_H 0.6
-
-// projectile
-#define PROJECTILE_W 0.4
-#define PROJECTILE_H 0.2
-
-// enemy projectile
-#define ENEMY_PROJECTILE_W 0.4
-#define ENEMY_PROJECTILE_H 0.2
 
 #endif /* collisions_h */

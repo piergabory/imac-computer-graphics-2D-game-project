@@ -5,15 +5,21 @@
  * -------------
  * draws sprites for each mobs of a list design by it's type.
  */
-static void drawMobList(char mob, Level level, int sprite, int alternatives) {
-    MobList list = getMobList(mob);
+static void drawMobList(MobType type, Level level) {
+    MobList ml = getMobList(type);
     
-    while (list != NULL) {
+    Sprite sprite;
+    SpriteAlt alt;
+    
+    while (ml != NULL) {
+        getSprite(ml->type, &sprite, &alt);
+        
         glPushMatrix();
-        glTranslatef(list->px * level.width, list->py * level.height,0);
-        drawSprite(sprite + ((int)(level.progress * 200) % alternatives));
-        list = list->next;
+        glTranslatef(ml->px * level.width, ml->py * level.height,0);
+        drawSprite(sprite + ((int)(level.progress * 200) % alt));
         glPopMatrix();
+        
+        ml = ml->next;
     }
 }
 
@@ -34,11 +40,11 @@ void draw() {
     glScalef(1.0/l.height, 1.0/l.height, 1.0);
     
     // move the viewport relative to the progress value
-    glTranslatef(-(l.progress * l.width) + 0.5, 0.5, 0);
+    glTranslatef(-l.progress * l.width, 1, 0);
     
     
     // paint terrain
-    drawTerrain(l, getViewportWidth(), getViewportHeight());
+    drawTerrain(l);
     
     glTranslatef(0, -1, 0);
     
@@ -49,40 +55,17 @@ void draw() {
     glPopMatrix();
     
     // paint mobs (bonus, ennemy, projectile)
-    drawMobList(BONUS, l, SPRITE_BONUS, SPRITE_BONUS_ALT_COUNT);
-    drawMobList(ENEMY, l, SPRITE_ENEMY, SPRITE_ENEMY_ALT_COUNT);
-    drawMobList(PROJECTILE, l, SPRITE_PROJECTILE, SPRITE_PROJECTILE_ALT_COUNT);
-    drawMobList(ENEMY_PROJECTILE, l, SPRITE_ENEMY_PROJECTILE, SPRITE_ENEMY_PROJECTILE_ALT_COUNT);
+    drawMobList(BONUS, l);
+    drawMobList(ENEMY, l);
+    drawMobList(PROJECTILE, l);
+    drawMobList(ENEMY_PROJECTILE, l);
     
     // restore view matrix
     glPopMatrix();
     
     // health bar
     drawHealthBar(p.health);
-    
-    // save view matrix
-    glPushMatrix();
-    
-    // scale the screen overlay to fill the screen
-    glTranslatef(0.5*(getViewportWidth()/(float)getViewportHeight()), 0.5, 0);
-    glScalef(.9,.9,1);
-
-    // print screen
-    
-    // if GAME OVER
-    if (l.status < 0) {
-        glClear(GL_COLOR_BUFFER_BIT);
-        drawSprite(SPRITE_DEFEAT);
-    }
-    
-    // IF LEVEL COMPLETE
-    else if (l.status > 0) {
-        glClear(GL_COLOR_BUFFER_BIT);
-        drawSprite(SPRITE_VICTORY);
-    }
-    
-    // restore view matrix
-    glPopMatrix();
+    drawAppropriateScreen(l.status);
 }
 
 

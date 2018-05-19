@@ -9,15 +9,13 @@
  * Displays the world.
  *
  * @param Level l, world to display
- * @param unsigned int vw, viewport width in pixels
- * @param unsigned int vh, viewport height in pixels
  */
-void drawTerrain(Level l, unsigned int vw, unsigned int vh){
+void drawTerrain(Level l){
     // compute the index of the first row to be drawn from the level map
     unsigned int start = l.progress * l.width + DEBUG_MARGIN;
     
     // compute the maximum numbers of columns to be drawn from the level map.
-    unsigned int stop = l.progress * l.width + vw * l.height / vh - DEBUG_MARGIN + 1;
+    unsigned int stop = l.progress * l.width + l.height * getAspectRatio() - DEBUG_MARGIN + 1;
     
     
     // for each row of the map
@@ -27,7 +25,7 @@ void drawTerrain(Level l, unsigned int vw, unsigned int vh){
             glPushMatrix();
             
             // move to the terrain bloc position
-            glTranslatef(x,y,0);
+            glTranslatef(x + 0.5, y - 0.5, 0);
             
             // draw terrain sprite
             if (l.map[y][x] != 0) {
