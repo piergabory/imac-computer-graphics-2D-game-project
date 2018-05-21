@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "gamedata.h"
+#include "math.h"
 
 /**
  * LOAD WORLD (LEVEL) DATA

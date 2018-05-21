@@ -10,7 +10,7 @@
  *
  * @param Mob *p reference to the player mob structure
  */
-void updatePlayer(Mob *p, Level l) {
+void updatePlayer(Mob *p, Level *l) {
     int up, down, left, right;
     
     up = getTriggerStatus(UP);
@@ -26,22 +26,18 @@ void updatePlayer(Mob *p, Level l) {
     
     // horizontal speed
     if (up && !down) {
-        p->vy = -PLAYER_SPEED / l.height;
+        p->vy = - p->max_speed / l->height;
     } else if (!up && down) {
-        p->vy = PLAYER_SPEED / l.height;
+        p->vy = p->max_speed / l->height;
     }
     
     // vertical speed
     if (left && !right) {
-        p->vx = -PLAYER_SPEED / l.width;
+        p->vx = - p->max_speed / l->width;
     } else if (!left && right) {
-        p->vx = PLAYER_SPEED / l.width;
+        p->vx = p->max_speed / l->width;
     }
-    
-    
-    // position from velocity
-    p->px += p->vx + PROGRESS_RATE;
-    p->py += p->vy;
+
     
     // velocity from drag
     p->vx *= DRAG;
@@ -59,6 +55,30 @@ void updatePlayer(Mob *p, Level l) {
         p->vy *= -1;
         p->py = roundf(p->py);
     }
+
+    
+    //// PLAYER COLLISIONS
+    
+    // Terrain
+    switch (isMobOnTerrain(*p, *l)) {
+        case OBSTACLE:
+            playerHealth(OBSTACLE_DMG);
+            p->px -= p->vx*2;
+            p->py -= p->vy*2;
+            break;
+            
+        case VOID:
+            p->px += p->vx + PROGRESS_RATE;
+            p->py += p->vy;
+            break;
+            
+        case FINISH_LINE:
+            l->status = LEVEL_COMPLETE;
+            break;
+    }
+    
+    // player cant leave the screen.
+    if (p->px < l->progress) p->px = l->progress;
     
     // player shoot
     if (getTriggerStatus(SPACE)) {
@@ -66,6 +86,7 @@ void updatePlayer(Mob *p, Level l) {
     } else {
         p->projectile_clock = 0;
     }
+    
 }
 
 

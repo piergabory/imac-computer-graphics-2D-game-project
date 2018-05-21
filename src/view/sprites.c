@@ -21,8 +21,18 @@ void getSprite(MobType type, Sprite *s, SpriteAlt *a) {
             *a = ALT_ENEMY;
             break;
             
-        case BONUS:
-            *s = SPRITE_BONUS;
+        case BONUS_HEALTH:
+            *s = SPRITE_BONUS_HEALTH;
+            *a = ALT_BONUS;
+            break;
+            
+        case BONUS_WEAPON:
+            *s = SPRITE_BONUS_WEAPON;
+            *a = ALT_BONUS;
+            break;
+            
+        case BONUS_SPEED:
+            *s = SPRITE_BONUS_SPEED;
             *a = ALT_BONUS;
             break;
             

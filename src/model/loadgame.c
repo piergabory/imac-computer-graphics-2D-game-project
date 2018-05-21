@@ -89,7 +89,9 @@ int loadWorld(char *path, Game *gm) {
             
             // CASE : bonus, allocate new bonus in moblist
             if (g== 0 && r == 0) {
-                if(newMob(&(gm->bonuses), BONUS, x/(float) width, y/(float) height, 0, 0) == NULL) return 4;
+                int bonus_type = rand() % BONUS_TYPE_COUNT;
+                
+                if(newMob(&(gm->bonuses), BONUS_HEALTH + bonus_type, x/(float) width, y/(float) height, 0, 0) == NULL) return 4;
             }
         }
     

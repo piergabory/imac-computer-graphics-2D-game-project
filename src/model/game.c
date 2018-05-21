@@ -24,7 +24,10 @@ Mob getPlayer() { return *(gm->player); }
 MobList getMobList(MobType type) {
     switch (type) {
         case ENEMY: return gm->enemies;
-        case BONUS: return gm->bonuses;
+        case BONUS_HEALTH:
+        case BONUS_WEAPON:
+        case BONUS_SPEED:
+            return gm->bonuses;
         case PROJECTILE: return gm->projectiles;
         case ENEMY_PROJECTILE: return gm->enemy_projectiles;
         case PLAYER: return gm->player;
@@ -126,35 +129,13 @@ void updateGame() {
     }
     
     // update player
-    updatePlayer(gm->player, *(gm->level));
-    
-    //// PLAYER COLLISIONS
-    
-    // Terrain
-    switch (isMobOnTerrain(*(gm->player), *(gm->level))) {
-        case OBSTACLE:
-            playerHealth(OBSTACLE_DMG);
-            gm->player->vx += PROGRESS_RATE*2;
-            gm->player->vx *= -1;
-            gm->player->vy *= -1;
-            break;
-            
-        case VOID:
-            // do nothing
-            break;
-            
-        case FINISH_LINE:
-            gm->level->status = LEVEL_COMPLETE;
-            break;
-    }
-    
-    // player cant leave the screen.
-    if (gm->player->px < gm->level->progress) gm->player->px = gm->level->progress;
+    updatePlayer(gm->player, gm->level);
+
     
     // Bonus, Enemy and Enemy Projectile
-    playerHit(&(gm->bonuses), BONUS_DMG);
-    playerHit(&(gm->enemies), ENEMY_DMG);
-    playerHit(&(gm->enemy_projectiles), ENEMY_PROJECTILE_DMG);
+    playerHit(&(gm->bonuses));
+    playerHit(&(gm->enemies));
+    playerHit(&(gm->enemy_projectiles));
     
     //// END PLAYER COLLISIONS
 
@@ -236,11 +217,36 @@ void updateGame() {
  * @param int damage, value added to the player's health on collision
  *      -> Mob damage is defined above
  */
-void playerHit(MobList *ml, int damage) {
+void playerHit(MobList *ml) {
     MobList *hit = isMobOnMoblist(*(gm->player), ml);
     if(*hit != NULL) {
+        switch ((*hit)->type) {
+            case ENEMY:
+                playerHealth(ENEMY_DMG);
+                break;
+                
+            case ENEMY_PROJECTILE:
+                playerHealth(ENEMY_PROJECTILE_DMG);
+                break;
+                
+            case BONUS_HEALTH:
+                playerHealth(BONUS_DMG);
+                break;
+                
+            case BONUS_SPEED:
+                gm->player->max_speed *= 1.5;
+                break;
+                
+            case BONUS_WEAPON:
+                gm->player->reload_time /= 2;
+                break;
+                
+            case PLAYER:
+            case PROJECTILE:
+                // do nothing
+                break;
+        }
         freeMob(hit);
-        playerHealth(damage);
     }
 }
 
@@ -261,7 +267,7 @@ void playerShoot() {
            gm->player->py,
            
            // velocity vector
-           PLAYER_SPEED * 1.01 /gm->level->height,
+           gm->player->max_speed * 1.01 /gm->level->height,
            0
            );
 }

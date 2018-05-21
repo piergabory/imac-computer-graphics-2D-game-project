@@ -113,7 +113,7 @@ void updateGame();
  * @param int damage, value added to the player's health on collision
  *      -> Mob damage is defined above
  */
-void playerHit(MobList *ml, int damage);
+void playerHit(MobList *ml);
 
 
 /**

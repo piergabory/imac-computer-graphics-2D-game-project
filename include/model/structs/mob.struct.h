@@ -1,10 +1,14 @@
 #ifndef mob_struct_h
 #define mob_struct_h
 
+#define BONUS_TYPE_COUNT 3
+
 //// Mob types definition
 typedef enum {
     ENEMY,
-    BONUS,
+    BONUS_HEALTH,
+    BONUS_WEAPON,
+    BONUS_SPEED,
     PLAYER,
     PROJECTILE,
     ENEMY_PROJECTILE
@@ -37,6 +41,15 @@ typedef struct _mobile {
      */
     unsigned int projectile_clock;
     
+    /**
+     * @var int reload_time
+     */
+    unsigned int reload_time;
+    
+    /**
+     * @var float max_speed
+     */
+    float max_speed;
     
     /**
      * @var char type of the mob (defined above)

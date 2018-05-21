@@ -55,7 +55,7 @@ void draw() {
     glPopMatrix();
     
     // paint mobs (bonus, ennemy, projectile)
-    drawMobList(BONUS, l);
+    drawMobList(BONUS_HEALTH, l);
     drawMobList(ENEMY, l);
     drawMobList(PROJECTILE, l);
     drawMobList(ENEMY_PROJECTILE, l);

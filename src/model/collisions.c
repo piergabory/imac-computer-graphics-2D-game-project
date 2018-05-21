@@ -28,8 +28,18 @@ static void setHitbox(char mobType, float *w, float *h) {
             *h = scaley * 1;
             break;
             
-        case BONUS:
+        case BONUS_HEALTH:
             *w = scalex * 0.6;
+            *h = scaley * 0.6;
+            break;
+            
+        case BONUS_WEAPON:
+            *w = scalex * 0.6;
+            *h = scaley * 0.4;
+            break;
+            
+        case BONUS_SPEED:
+            *w = scalex * 0.8;
             *h = scaley * 0.6;
             break;
             

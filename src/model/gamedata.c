@@ -73,8 +73,10 @@ Mob* newMob(MobList *list, MobType type, float x, float y, float vx, float vy) {
     
     new->health = 1;
     new->projectile_clock = 0;
+    new->reload_time = 20;
+    new->max_speed = 0.1;
     
-    new->type = type;
+    new->type = type; 
     new->next = *list;
     
     return *list = new;
@@ -96,7 +98,7 @@ Game* allocGame() {
     Game *new = (Game *) malloc(sizeof(Game));
     
     // allocate player
-    new->player = (Mob*) malloc(sizeof(Mob));
+    newMob(&(new->player), PLAYER, 0, 0, 0, 0);
     
     // initialize moblists
     new->enemies = NULL;
