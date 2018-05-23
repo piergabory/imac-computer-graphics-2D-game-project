@@ -64,8 +64,8 @@ void draw() {
     glPopMatrix();
     
     // health bar
-    drawHealthBar(p.health);
     drawAppropriateScreen(l.status);
+    drawHealthBar(p.health);
 }
 
 

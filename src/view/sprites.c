@@ -151,16 +151,16 @@ int initSprites() {
         // drawing a square and apply the sprite:
         // vertex and their matching texture coordinates
         glTexCoord2f(screenWidth, screenHeight * (i+1) + screenBegin);
-        glVertex2f(0.5, 0.5 / getAspectRatio());
+        glVertex2f(1,1);
         
         glTexCoord2f(0, screenHeight * (i+1) + screenBegin);
-        glVertex2f(-0.5, 0.5 / getAspectRatio());
+        glVertex2f(0,1);
         
         glTexCoord2f(0, screenHeight * i + screenBegin);
-        glVertex2f(-0.5, -0.5 / getAspectRatio());
+        glVertex2f(0,0);
         
         glTexCoord2f(screenWidth, screenHeight * i + screenBegin);
-        glVertex2f(0.5, -0.5 / getAspectRatio());
+        glVertex2f(1, 0);
         
         // close list
         glEnd();

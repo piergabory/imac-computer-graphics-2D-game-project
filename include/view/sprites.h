@@ -10,14 +10,14 @@
 
 // texture grid dimentions
 #define TEXTURE_COL 8
-#define TEXTURE_ROW 22
+#define TEXTURE_ROW 28
 
 // screen values in texture grid cells
 #define SCREEN_BEGIN 4 // row after which screens begin
 #define SCREEN_WIDTH 8 
 #define SCREEN_HEIGHT 6
 
-#define SCREEN_COUNT 3
+#define SCREEN_COUNT 4
 
 // texture indexes
 // a entity can have multiple sprites next to each other
@@ -45,7 +45,8 @@ typedef enum {
 typedef enum {
     SCREEN_GAME_OVER,
     SCREEN_LEVEL_COMPLETE,
-    SCREEN_PRESS_SPACEBAR
+    SCREEN_PRESS_SPACEBAR,
+    SCREEN_OVERLAY
 } Screen;
 
 // total sprites

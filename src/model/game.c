@@ -75,7 +75,7 @@ int initGame() {
     // -- initialise player
     
     // set player default position
-    gm->player->px = 0.01;
+    gm->player->px = 0.05;
     gm->player->py = 0.5;
     
     // velocity vector
