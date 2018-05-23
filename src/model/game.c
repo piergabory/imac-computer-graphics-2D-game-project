@@ -123,7 +123,7 @@ void updateGame() {
         gm->level->progress += PROGRESS_RATE;
     
      // player shoot if is shooting
-    if (gm->player->projectile_clock % 20 == 1) {
+    if (gm->player->projectile_clock % gm->player->reload_time == 1) {
         playerShoot();
         gm->player->projectile_clock ++;
     }
@@ -234,11 +234,15 @@ void playerHit(MobList *ml) {
                 break;
                 
             case BONUS_SPEED:
-                gm->player->max_speed *= 1.5;
+                gm->player->max_speed *= SPEED_BUFF;
                 break;
                 
             case BONUS_WEAPON:
-                gm->player->reload_time /= 2;
+                // one chance over three to have more bullets or faster reload speed
+                if (rand()%3)
+                    gm->player->reload_time /= WEAPON_BUFF;
+                else
+                    gm->player->bullet_count++;
                 break;
                 
             case PLAYER:
@@ -257,19 +261,24 @@ void playerHit(MobList *ml) {
  * Spawns a player projectile on the player, with a fixed X velocity.
  */
 void playerShoot() {
-    newMob(
-           // type
-           &(gm->projectiles),  // list
-           PROJECTILE,      // type
-           
-           // position
-           gm->player->px,
-           gm->player->py,
-           
-           // velocity vector
-           gm->player->max_speed * 1.01 /gm->level->height,
-           0
-           );
+    float angle = 0;
+    float speed = 0;
+    float vx = 0;
+    float vy = 0;
+    
+    // for each bullet
+    for (unsigned int i = 0; i < gm->player->bullet_count; i++){
+        
+        // compute a different spread and speed for each bullet
+        angle = i/(float)gm->player->bullet_count;
+        speed = gm->player->max_speed * (1.01 - angle/10.0);
+        
+        vx = speed / gm->level->height;
+        vy = speed * angle / gm->level->height;
+        
+        newMob(&(gm->projectiles), PROJECTILE, gm->player->px, gm->player->py, vx, vy);
+        newMob(&(gm->projectiles), PROJECTILE, gm->player->px, gm->player->py, vx, -vy);
+    }
 }
 
 

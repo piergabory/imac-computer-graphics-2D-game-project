@@ -27,6 +27,9 @@
 // Player default health
 #define PLAYER_STARTING_HEALTH 5
 
+// Bonus effect intensity
+#define SPEED_BUFF 1.5
+#define WEAPON_BUFF 1.5
 
 // Health Damages/Bonuses
 typedef enum {

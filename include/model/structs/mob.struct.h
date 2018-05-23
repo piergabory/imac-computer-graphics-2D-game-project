@@ -47,6 +47,11 @@ typedef struct _mobile {
     unsigned int reload_time;
     
     /**
+     * @var int bullet_count
+     */
+    unsigned int bullet_count;
+    
+    /**
      * @var float max_speed
      */
     float max_speed;

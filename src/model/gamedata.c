@@ -73,7 +73,8 @@ Mob* newMob(MobList *list, MobType type, float x, float y, float vx, float vy) {
     
     new->health = 1;
     new->projectile_clock = 0;
-    new->reload_time = 20;
+    new->reload_time = 50;
+    new->bullet_count = 1;
     new->max_speed = 0.1;
     
     new->type = type; 
