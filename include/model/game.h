@@ -24,8 +24,9 @@
 // physics between mobs (and the ground)
 #include "collisions.h"
 
-// Player default health
+// Player default
 #define PLAYER_STARTING_HEALTH 5
+#define PLAYER_DEFAULT_SPEED 0.05
 
 // Bonus effect intensity
 #define SPEED_BUFF 1.5

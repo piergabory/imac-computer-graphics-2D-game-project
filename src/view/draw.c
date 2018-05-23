@@ -11,11 +11,20 @@ static void drawMobList(MobType type, Level level) {
     Sprite sprite;
     SpriteAlt alt;
     
+    float angle;
+    
     while (ml != NULL) {
         getSprite(ml->type, &sprite, &alt);
         
         glPushMatrix();
+        
+        angle = -atanf(ml->vy/(ml->vx + PROGRESS_RATE)) * 30.0/PI;
         glTranslatef(ml->px * level.width, ml->py * level.height,0);
+        
+        if (ml->type == PLAYER || ml->type == PROJECTILE)
+            angle *= -1;
+        
+        glRotatef(angle,0,0,1);
         drawSprite(sprite + ((int)(level.progress * 200) % alt));
         glPopMatrix();
         
@@ -42,19 +51,13 @@ void draw() {
     // move the viewport relative to the progress value
     glTranslatef(-l.progress * l.width, 1, 0);
     
-    
     // paint terrain
     drawTerrain(l);
     
     glTranslatef(0, -1, 0);
     
-    // paint player
-    glPushMatrix();
-    glTranslatef(p.px * l.width, p.py * l.height,0);
-    drawSprite(SPRITE_PLAYER + ((int)(l.progress*200)%2));
-    glPopMatrix();
-    
     // paint mobs (bonus, ennemy, projectile)
+    drawMobList(PLAYER,l);
     drawMobList(BONUS_HEALTH, l);
     drawMobList(ENEMY, l);
     drawMobList(PROJECTILE, l);

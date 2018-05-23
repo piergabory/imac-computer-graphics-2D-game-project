@@ -85,6 +85,7 @@ int initGame() {
     gm->player->health = PLAYER_STARTING_HEALTH;
     gm->player->type = PLAYER;
     gm->player->next = NULL;
+    gm->player->max_speed = PLAYER_DEFAULT_SPEED;
     
     return 1;
 }
@@ -271,7 +272,7 @@ void playerShoot() {
         
         // compute a different spread and speed for each bullet
         angle = i/(float)gm->player->bullet_count;
-        speed = gm->player->max_speed * (1.01 - angle/10.0);
+        speed = PLAYER_DEFAULT_SPEED * (1.01 - angle/10.0);
         
         vx = speed / gm->level->height;
         vy = speed * angle / gm->level->height;

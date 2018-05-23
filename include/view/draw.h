@@ -1,12 +1,16 @@
 #ifndef draw_h
 #define draw_h
 
+#include <math.h>
+
 #include "model/game.h"
 #include "support/window.h"
 
 #include "sprites.h"
 #include "terrain.h"
 #include "gui.h"
+
+#define PI 3.141592654
 
 /**
  * INIT VIEW
